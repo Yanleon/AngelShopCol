@@ -44,6 +44,19 @@
                     </p>
                 </a>
             </div>
+
+            <div class="px-4 group/item inactive">
+                <a href="https://MaxSystems.com/Soporte"
+                    target="_blank"
+                    class="flex gap-2.5 p-1.5 items-center cursor-pointer hover:rounded-lg  hover:bg-gray-100 hover:dark:bg-gray-950' peer">
+                    <span class="icon-sales text-2xl"></span>
+                    <p class="text-gray-600 dark:text-gray-300 font-semibold whitespace-nowrap group-[.sidebar-collapsed]/container:hidden ">
+                        Formulario de Contacto
+                    </p>
+                </a>
+            </div>
+
+
         </nav>
     </div>
 

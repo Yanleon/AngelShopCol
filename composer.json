@@ -95,6 +95,8 @@
             "Webkul\\Theme\\": "packages/Webkul/Theme/src",
             "Webkul\\User\\": "packages/Webkul/User/src",
             "Webkul\\Epayco\\": "packages/Webkul/Epayco/src"
+            
+
         }
     },
     "autoload-dev": {
@@ -104,6 +106,9 @@
             "Webkul\\Core\\Tests\\": "packages/Webkul/Core/tests",
             "Webkul\\DataGrid\\Tests\\": "packages/Webkul/DataGrid/tests",
             "Webkul\\Shop\\Tests\\": "packages/Webkul/Shop/tests"
+             
+            
+            
         }
     },
     "scripts": {

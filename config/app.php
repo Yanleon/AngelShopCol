@@ -238,6 +238,8 @@ return [
         Webkul\Theme\Providers\ThemeServiceProvider::class,
         Webkul\User\Providers\UserServiceProvider::class,
         Webkul\Epayco\Providers\EpaycoServiceProvider::class,
+              
+
     ])->toArray(),
 
     /*

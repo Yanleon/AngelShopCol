@@ -1,0 +1,9 @@
+{
+    "name": "contact/module",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Contact\\": "src/"
+        }
+    }
+}
