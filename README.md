@@ -4,13 +4,11 @@ Estamos encantados de que formes parte de nuestra comunidad. Con nuestra platafo
 
 ## 📌 Tus datos de acceso
 - **URL de acceso:** https://tudominio.com/admin 
-- **Usuario:** admin@gmail.com  
-- **Contraseña:** admin123 (puedes cambiarla desde la configuración)  
+- **Usuario:** 
+- **Contraseña:** 
 
 ## 📖 Documentación y soporte
 Para ayudarte a empezar, hemos preparado una documentación completa donde encontrarás guías paso a paso sobre cómo configurar y gestionar tu ecommerce:  
-
-📘 **Documentación:** [https://halltec-ecommerce-doc.vercel.app/](https://halltec-ecommerce-doc.vercel.app/)
 
 # 📦 Guía de Instalación
 
