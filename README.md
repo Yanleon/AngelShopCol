@@ -1,4 +1,4 @@
-# ¡Bienvenido a Halltec Ecommerce!
+# ¡Bienvenido!
 
 Estamos encantados de que formes parte de nuestra comunidad. Con nuestra plataforma, podrás gestionar tu tienda en línea de manera eficiente y potenciar tu negocio digital.
 
