@@ -2,6 +2,7 @@
 
 namespace Webkul\Epayco\Helpers;
 
+use Illuminate\Support\Facades\Log;
 use Webkul\Sales\Repositories\InvoiceRepository;
 use Webkul\Sales\Repositories\OrderRepository;
 
@@ -65,14 +66,20 @@ class Ipn
         $this->post = $post;
 
         try {
+            Log::info('Epayco IPN received', $post);
 
             $this->public_key = core()->getConfigData('sales.payment_methods.epayco.public_key');
             $this->cust_id_client = core()->getConfigData('sales.payment_methods.epayco.cust_id_client');
             $this->p_key = core()->getConfigData('sales.payment_methods.epayco.p_key');
             $this->getOrder();
+            if (!$this->order) {
+                Log::error('Epayco IPN: Order not found for x_id_invoice ' . ($this->post['x_id_invoice'] ?? 'unknown'));
+                return response()->json(['error' => 'Order not found'], 404);
+            }
             return $this->processOrder();
 
         } catch (\Exception $e) {
+            Log::error('Epayco IPN error: ' . $e->getMessage(), $post);
             throw $e;
         }
     }
@@ -84,7 +91,9 @@ class Ipn
      */
     protected function getOrder()
     {
-        return $this->order = $this->orderRepository->findOneByField(['id' => $this->post['x_id_invoice']]);
+        $this->order = $this->orderRepository->findOneByField(['id' => $this->post['x_id_invoice']]);
+        Log::info('Epayco IPN looking for order', ['x_id_invoice' => $this->post['x_id_invoice'], 'found' => $this->order ? $this->order->id : null]);
+        return $this->order;
     }
 
     /**
@@ -94,6 +103,12 @@ class Ipn
      */
     protected function processOrder()
     {
+        if (!$this->order) {
+            Log::error('Epayco IPN processOrder called without order');
+            return response()->json(['error' => 'No order'], 404);
+        }
+        Log::info('Epayco IPN processing order', ['order_id' => $this->order->id]);
+
         $response = [];
         $x_ref_payco      = $this->post['x_ref_payco'];
         $x_transaction_id = $this->post['x_transaction_id'];
@@ -114,6 +129,7 @@ class Ipn
             //Validamos la firma
             if ($x_signature == $signature) {
                 // se valida que la orden no haya sido procesada anteriormente
+                Log::info('Epayco IPN signature valid', ['order_id' => $numOrder]);
 
                     $x_cod_response = $this->post['x_cod_response'];
 

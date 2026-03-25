@@ -145,14 +145,14 @@ class SEO
      * @return array
      */
     public function getProductOffers($product)
-    {
-        return [
-            '@type'         => 'Offer',
-            'priceCurrency' => core()->getCurrentCurrencyCode(),
-            'price'         => $product->getTypeInstance()->getMinimalPrice(),
-            'availability'  => 'https://schema.org/InStock',
-        ];
-    }
+{
+    return [
+        '@type'         => 'Offer',
+        'priceCurrency' => core()->getCurrentCurrencyCode(),
+        'price'         => number_format($product->getTypeInstance()->getMinimalPrice(), 0, '', ''),
+        'availability'  => 'https://schema.org/InStock',
+    ];
+}
 
     /**
      * Returns product json ld data for category
