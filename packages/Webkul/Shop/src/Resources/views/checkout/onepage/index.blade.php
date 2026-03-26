@@ -320,16 +320,12 @@
                             return;
                         }
 
-                        if (attempt > 10) {
+                        if (attempt > 25) {
                             this.isPlacingOrder = false;
                             this.$emitter.emit('add-flash', {
                                 type: 'error',
-                                message: 'No pudimos mostrar el checkout de Bold. Intenta nuevamente.',
+                                message: 'No pudimos mostrar el checkout de Bold. Desactiva el bloqueador o permite pop-ups y vuelve a intentar.',
                             });
-
-                            if (this.boldConfig) {
-                                window.location.href = '{{ route('bold.checkout') }}';
-                            }
                             return;
                         }
 
