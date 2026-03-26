@@ -2,12 +2,23 @@
 
 namespace Webkul\Epayco\Payment;
 
+use Illuminate\Support\Facades\Storage;
 use Webkul\Payment\Payment\Payment;
 
 class Epayco extends Payment
 {
     protected $code = 'epayco';
 
+    public function getImage()
+    {
+        $uploaded = $this->getConfigData('image');
+
+        if ($uploaded) {
+            return Storage::url($uploaded);
+        }
+
+        return null;
+    }
 
     public function getRedirectUrl()
     {
@@ -25,4 +36,3 @@ class Epayco extends Payment
         return true;
     }
 }
-
