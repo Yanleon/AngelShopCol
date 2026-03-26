@@ -53,11 +53,11 @@ class PaymentController extends Controller
         $expirationDate = $request->input('expiration_date');
 
         if ($cart) {
-            $orderId = $orderId ?: 'BOLD-' . $cart->id . '-' . now()->timestamp;
+            $orderId = $orderId ?: 'BOLD-'.$cart->id.'-'.now()->timestamp;
             session()->put('bold_order_id', $orderId);
             $amount = $amount !== null ? (int) $amount : (int) round($cart->grand_total);
             $currency = $currency ?: $cart->cart_currency_code;
-            $description = $description ?: 'Pago de pedido #' . $cart->id;
+            $description = $description ?: 'Pago de pedido #'.$cart->id;
         }
 
         if ($amount < 1000) {
@@ -91,7 +91,7 @@ class PaymentController extends Controller
 
         if ($secretKey) {
             // Bold concatena orderId + amount (string) + currency + secretKey
-            $signature = hash('sha256', "{$orderId}" . (string) $amount . "{$currency}{$secretKey}");
+            $signature = hash('sha256', "{$orderId}".(string) $amount."{$currency}{$secretKey}");
         }
 
         $config = array_filter([
@@ -154,7 +154,9 @@ class PaymentController extends Controller
             'status'   => $status,
         ];
 
-        if ($status === 'approved' && $orderId) {
+        $isApproved = $status === 'approved';
+
+        if ($isApproved && $orderId) {
             try {
                 $order = $this->createOrderFromCart($orderId);
                 $params['created_order_id'] = $order?->increment_id ?? null;
@@ -174,6 +176,16 @@ class PaymentController extends Controller
                     'message' => $e->getMessage(),
                 ]);
             }
+        }
+
+        if ($isApproved && Route::has('shop.checkout.success')) {
+            return redirect()->route('shop.checkout.success', $params);
+        }
+
+        if (! $isApproved && Route::has('shop.checkout.onepage.index')) {
+            return redirect()
+                ->route('shop.checkout.onepage.index')
+                ->with('error', 'El pago fue rechazado. Intenta nuevamente con otro método de pago.');
         }
 
         if (Route::has('shop.checkout.success')) {
@@ -269,7 +281,7 @@ class PaymentController extends Controller
         }
 
         $cart = Cart::getCart();
-        $orderId = 'BOLD-' . ($cart?->id ?: now()->timestamp) . '-' . now()->timestamp;
+        $orderId = 'BOLD-'.($cart?->id ?: now()->timestamp).'-'.now()->timestamp;
         session()->put('bold_order_id', $orderId);
 
         return $orderId;
