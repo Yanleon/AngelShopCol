@@ -146,9 +146,9 @@
             app.component('v-checkout', {
                 template: '#v-checkout-template',
 
-                data() {
-                    return {
-                        cart: null,
+                    data() {
+                        return {
+                            cart: null,
 
                         displayTax: {
                             prices: "{{ core()->getConfigData('sales.taxes.shopping_cart.display_prices') }}",
@@ -160,15 +160,17 @@
 
                         isPlacingOrder: false,
 
-                        currentStep: 'address',
+                            currentStep: 'address',
 
                         shippingMethods: null,
 
-                        paymentMethods: null,
+                            paymentMethods: null,
 
                         canPlaceOrder: false,
-                    }
-                },
+
+                        boldConfig: null,
+                        }
+                    },
 
                 mounted() {
                     this.getCart();
@@ -255,6 +257,7 @@
 
                         this.$axios.get('{{ route('bold.config') }}')
                             .then(({ data }) => {
+                                this.boldConfig = data;
                                 this.renderBoldInline(data);
                                 this.autoOpenBold();
                             })
@@ -323,6 +326,10 @@
                                 type: 'error',
                                 message: 'No pudimos mostrar el checkout de Bold. Intenta nuevamente.',
                             });
+
+                            if (this.boldConfig) {
+                                window.location.href = '{{ route('bold.checkout') }}';
+                            }
                             return;
                         }
 
