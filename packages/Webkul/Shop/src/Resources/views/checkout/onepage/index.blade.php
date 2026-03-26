@@ -61,7 +61,6 @@
             <x-shop::shimmer.checkout.onepage />
         </v-checkout>
 
-        <div id="bold-inline-container" class="hidden"></div>
     </div>
 
     @pushOnce('scripts')
@@ -167,9 +166,6 @@
                             paymentMethods: null,
 
                         canPlaceOrder: false,
-
-                        boldConfig: null,
-                        boldScriptReady: false,
                         }
                     },
 
@@ -230,10 +226,6 @@
                     },
 
                     placeOrder() {
-                        if (this.cart?.payment_method === 'boldpayment') {
-                            return this.startBoldCheckout();
-                        }
-
                         this.isPlacingOrder = true;
 
                         this.$axios.post('{{ route('shop.checkout.onepage.orders.store') }}')
@@ -252,147 +244,6 @@
                                 this.$emitter.emit('add-flash', { type: 'error', message: error.response?.data?.message || 'No se pudo procesar el pedido.' });
                             });
                     },
-
-                    startBoldCheckout() {
-                        this.isPlacingOrder = true;
-
-                        this.ensureBoldScript()
-                            .then(() => this.$axios.get('{{ route('bold.config') }}'))
-                            .then(({ data }) => {
-                                this.boldConfig = data;
-                                this.renderBoldInline(data);
-                                this.waitForBoldButton();
-                            })
-                            .catch(error => {
-                                this.isPlacingOrder = false;
-
-                                this.$emitter.emit('add-flash', {
-                                    type: 'error',
-                                    message: error?.response?.data?.message || 'No pudimos iniciar Bold. Intenta nuevamente.',
-                                });
-                            });
-                    },
-
-                    renderBoldInline(cfg) {
-                        const container = document.getElementById('bold-inline-container');
-
-                        if (! container) {
-                            return;
-                        }
-
-                        container.classList.remove('hidden');
-                        container.innerHTML = '';
-
-                        const script = document.createElement('script');
-
-                        script.setAttribute('data-bold-button', cfg.buttonStyle || 'dark-L');
-                        script.dataset.apiKey = cfg.apiKey;
-                        script.dataset.orderId = cfg.orderId;
-                        script.dataset.currency = cfg.currency;
-                        script.dataset.amount = cfg.amount;
-                        script.dataset.integritySignature = cfg.integritySignature;
-                        script.dataset.description = cfg.description;
-                        script.dataset.redirectionUrl = cfg.redirectionUrl || '{{ route('bold.callback') }}';
-                        script.dataset.renderMode = cfg.renderMode || 'embedded';
-
-                        if (cfg.originUrl) script.dataset.originUrl = cfg.originUrl;
-                        if (cfg.customerData) script.setAttribute('data-customer-data', cfg.customerData);
-                        if (cfg.billingAddress) script.setAttribute('data-billing-address', cfg.billingAddress);
-                        if (cfg.extraData1) script.dataset.extraData1 = cfg.extraData1;
-                        if (cfg.extraData2) script.dataset.extraData2 = cfg.extraData2;
-                        if (cfg.tax) script.dataset.tax = cfg.tax;
-                        if (cfg.expirationDate) script.dataset.expirationDate = cfg.expirationDate;
-
-                        container.appendChild(script);
-                    },
-
-                    waitForBoldButton() {
-                        const container = document.getElementById('bold-inline-container');
-
-                        if (! container) {
-                            this.isPlacingOrder = false;
-                            return;
-                        }
-
-                        const clickIfReady = () => {
-                            const btn = container.querySelector('button');
-
-                            if (btn) {
-                                btn.click();
-                                this.stopBoldObserver();
-                                this.isPlacingOrder = false;
-                                return true;
-                            }
-
-                            return false;
-                        };
-
-                        if (clickIfReady()) {
-                            return;
-                        }
-
-                        this.stopBoldObserver();
-
-                        this._boldObserver = new MutationObserver(() => {
-                            clickIfReady();
-                        });
-
-                        this._boldObserver.observe(container, { childList: true, subtree: true });
-
-                        this._boldTimeout = setTimeout(() => {
-                            this.stopBoldObserver();
-                            this.isPlacingOrder = false;
-
-                            this.$emitter.emit('add-flash', {
-                                type: 'error',
-                                message: 'No pudimos mostrar el checkout de Bold. Desactiva el bloqueador o permite pop-ups y vuelve a intentar.',
-                            });
-
-                            window.open('{{ route('bold.checkout') }}', '_blank', 'width=520,height=820');
-                        }, 8000);
-                    },
-
-                    stopBoldObserver() {
-                        if (this._boldObserver) {
-                            this._boldObserver.disconnect();
-                            this._boldObserver = null;
-                        }
-
-                        if (this._boldTimeout) {
-                            clearTimeout(this._boldTimeout);
-                            this._boldTimeout = null;
-                        }
-                    },
-
-                    ensureBoldScript() {
-                        if (this.boldScriptReady) {
-                            return Promise.resolve();
-                        }
-
-                        return new Promise((resolve, reject) => {
-                            if (document.querySelector('script[data-bold-lib]')) {
-                                this.boldScriptReady = true;
-                                resolve();
-                                return;
-                            }
-
-                            const script = document.createElement('script');
-                            script.src = 'https://checkout.bold.co/library/boldPaymentButton.js';
-                            script.async = true;
-                            script.setAttribute('data-bold-lib', '1');
-
-                            script.onload = () => {
-                                this.boldScriptReady = true;
-                                resolve();
-                            };
-
-                            script.onerror = () => {
-                                reject(new Error('No se pudo cargar el script de Bold.'));
-                            };
-
-                            document.head.appendChild(script);
-                        });
-                    }
                 },
             });
         </script>
