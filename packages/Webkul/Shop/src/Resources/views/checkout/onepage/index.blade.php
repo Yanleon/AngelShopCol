@@ -169,6 +169,7 @@
                         canPlaceOrder: false,
 
                         boldConfig: null,
+                        boldScriptReady: false,
                         }
                     },
 
@@ -255,7 +256,8 @@
                     startBoldCheckout() {
                         this.isPlacingOrder = true;
 
-                        this.$axios.get('{{ route('bold.config') }}')
+                        this.ensureBoldScript()
+                            .then(() => this.$axios.get('{{ route('bold.config') }}'))
                             .then(({ data }) => {
                                 this.boldConfig = data;
                                 this.renderBoldInline(data);
@@ -266,7 +268,7 @@
 
                                 this.$emitter.emit('add-flash', {
                                     type: 'error',
-                                    message: error.response?.data?.message || 'No pudimos iniciar Bold. Intenta nuevamente.',
+                                    message: error?.response?.data?.message || 'No pudimos iniciar Bold. Intenta nuevamente.',
                                 });
                             });
                     },
@@ -345,6 +347,8 @@
                                 type: 'error',
                                 message: 'No pudimos mostrar el checkout de Bold. Desactiva el bloqueador o permite pop-ups y vuelve a intentar.',
                             });
+
+                            window.open('{{ route('bold.checkout') }}', '_blank', 'width=520,height=820');
                         }, 8000);
                     },
 
@@ -358,6 +362,36 @@
                             clearTimeout(this._boldTimeout);
                             this._boldTimeout = null;
                         }
+                    },
+
+                    ensureBoldScript() {
+                        if (this.boldScriptReady) {
+                            return Promise.resolve();
+                        }
+
+                        return new Promise((resolve, reject) => {
+                            if (document.querySelector('script[data-bold-lib]')) {
+                                this.boldScriptReady = true;
+                                resolve();
+                                return;
+                            }
+
+                            const script = document.createElement('script');
+                            script.src = 'https://checkout.bold.co/library/boldPaymentButton.js';
+                            script.async = true;
+                            script.setAttribute('data-bold-lib', '1');
+
+                            script.onload = () => {
+                                this.boldScriptReady = true;
+                                resolve();
+                            };
+
+                            script.onerror = () => {
+                                reject(new Error('No se pudo cargar el script de Bold.'));
+                            };
+
+                            document.head.appendChild(script);
+                        });
                     }
                 },
             });
