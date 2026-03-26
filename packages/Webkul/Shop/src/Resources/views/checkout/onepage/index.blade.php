@@ -62,6 +62,8 @@
         </v-checkout>
     </div>
 
+    @include('boldpayment::bold-button')
+
     @pushOnce('scripts')
         <script
             type="text/x-template"
@@ -118,8 +120,12 @@
                                 {!! view_render_event('bagisto.shop.checkout.onepage.summary.paypal_smart_button.after') !!}
                             </template>
 
-                            <template v-if="cart.payment_method == 'epayco'">
+                            <template v-else-if="cart.payment_method == 'epayco'">
                                 <v-epayco-button></v-epayco-button>
+                            </template>
+
+                            <template v-else-if="cart.payment_method == 'boldpayment'">
+                                <v-bold-button></v-bold-button>
                             </template>
 
                             <template v-else>
