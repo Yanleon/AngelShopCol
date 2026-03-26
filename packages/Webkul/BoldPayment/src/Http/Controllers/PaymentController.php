@@ -161,6 +161,10 @@ class PaymentController extends Controller
                 $order = $this->createOrderFromCart($orderId);
                 $params['created_order_id'] = $order?->increment_id ?? null;
                 $this->markOrderPaid($order->increment_id);
+
+                if ($order?->id) {
+                    session()->put('order_id', $order->id);
+                }
             } catch (\Exception $e) {
                 Log::error('[Bold] Error al procesar orden tras callback', [
                     'orderId' => $orderId,
@@ -178,8 +182,8 @@ class PaymentController extends Controller
             }
         }
 
-        if ($isApproved && Route::has('shop.checkout.success')) {
-            return redirect()->route('shop.checkout.success', $params);
+        if ($isApproved && Route::has('shop.checkout.onepage.success')) {
+            return redirect()->route('shop.checkout.onepage.success', $params);
         }
 
         if (! $isApproved && Route::has('shop.checkout.onepage.index')) {
@@ -188,8 +192,8 @@ class PaymentController extends Controller
                 ->with('error', 'El pago fue rechazado. Intenta nuevamente con otro método de pago.');
         }
 
-        if (Route::has('shop.checkout.success')) {
-            return redirect()->route('shop.checkout.success', $params);
+        if (Route::has('shop.checkout.onepage.success')) {
+            return redirect()->route('shop.checkout.onepage.success', $params);
         }
 
         $query = http_build_query([
