@@ -259,7 +259,7 @@
                             .then(({ data }) => {
                                 this.boldConfig = data;
                                 this.renderBoldInline(data);
-                                this.autoOpenBold();
+                                this.waitForBoldButton();
                             })
                             .catch(error => {
                                 this.isPlacingOrder = false;
@@ -304,7 +304,7 @@
                         container.appendChild(script);
                     },
 
-                    autoOpenBold(attempt = 0) {
+                    waitForBoldButton() {
                         const container = document.getElementById('bold-inline-container');
 
                         if (! container) {
@@ -312,24 +312,52 @@
                             return;
                         }
 
-                        const btn = container.querySelector('button');
+                        const clickIfReady = () => {
+                            const btn = container.querySelector('button');
 
-                        if (btn) {
-                            btn.click();
-                            this.isPlacingOrder = false;
+                            if (btn) {
+                                btn.click();
+                                this.stopBoldObserver();
+                                this.isPlacingOrder = false;
+                                return true;
+                            }
+
+                            return false;
+                        };
+
+                        if (clickIfReady()) {
                             return;
                         }
 
-                        if (attempt > 25) {
+                        this.stopBoldObserver();
+
+                        this._boldObserver = new MutationObserver(() => {
+                            clickIfReady();
+                        });
+
+                        this._boldObserver.observe(container, { childList: true, subtree: true });
+
+                        this._boldTimeout = setTimeout(() => {
+                            this.stopBoldObserver();
                             this.isPlacingOrder = false;
+
                             this.$emitter.emit('add-flash', {
                                 type: 'error',
                                 message: 'No pudimos mostrar el checkout de Bold. Desactiva el bloqueador o permite pop-ups y vuelve a intentar.',
                             });
-                            return;
+                        }, 8000);
+                    },
+
+                    stopBoldObserver() {
+                        if (this._boldObserver) {
+                            this._boldObserver.disconnect();
+                            this._boldObserver = null;
                         }
 
-                        setTimeout(() => this.autoOpenBold(attempt + 1), 200);
+                        if (this._boldTimeout) {
+                            clearTimeout(this._boldTimeout);
+                            this._boldTimeout = null;
+                        }
                     }
                 },
             });
