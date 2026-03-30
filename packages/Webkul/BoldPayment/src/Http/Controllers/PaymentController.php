@@ -72,10 +72,8 @@ class PaymentController extends Controller
 
         $redirectUrl = str_replace('127.0.0.1', 'localhost', $request->input('redirect_url', $defaultRedirect));
         $redirectUrl = str_replace('http://', 'https://', $redirectUrl);
-        // Usar Embedded Checkout por defecto según la guía.
         $renderMode = $renderMode ?: 'embedded';
 
-        // Normalizar datos anidados según documentación (cadenas JSON en camelCase).
         if (is_array($customerData)) {
             $customerData = json_encode($customerData);
         }
@@ -90,7 +88,6 @@ class PaymentController extends Controller
         $signature = null;
 
         if ($secretKey) {
-            // Bold concatena orderId + amount (string) + currency + secretKey
             $signature = hash('sha256', "{$orderId}".(string) $amount."{$currency}{$secretKey}");
         }
 
@@ -244,20 +241,21 @@ class PaymentController extends Controller
             return response()->json(['message' => 'No hay carrito activo'], 404);
         }
 
-        $this->validateOrder();
         Cart::collectTotals();
 
-        $orderId = $this->getOrderId();
-        $amount = (int) round($cart->grand_total);
+        $orderId  = $this->getOrderId();
+        $amount   = (int) round($cart->grand_total);
         $currency = strtoupper($cart->cart_currency_code ?: 'COP');
-        $description = 'Pago con Bold';
-        $originUrl = url()->current();
 
-        $apiKey = core()->getConfigData('sales.payment_methods.boldpayment.api_key');
+        $apiKey    = core()->getConfigData('sales.payment_methods.boldpayment.api_key');
         $secretKey = core()->getConfigData('sales.payment_methods.boldpayment.secret_key');
 
         if (empty($apiKey) || empty($secretKey)) {
             return response()->json(['message' => 'Faltan llaves de Bold en configuración'], 500);
+        }
+
+        if ($amount < 1000) {
+            return response()->json(['message' => 'El monto debe ser mayor o igual a 1000 (COP)'], 422);
         }
 
         $signature = hash('sha256', "{$orderId}{$amount}{$currency}{$secretKey}");
@@ -266,10 +264,10 @@ class PaymentController extends Controller
             'orderId'            => $orderId,
             'amount'             => (string) $amount,
             'currency'           => $currency,
-            'description'        => $description,
+            'description'        => 'Pago con Bold #' . $cart->id,
             'redirectionUrl'     => route('bold.callback'),
             'renderMode'         => 'embedded',
-            'originUrl'          => $originUrl,
+            'originUrl'          => url()->current(),
             'apiKey'             => $apiKey,
             'integritySignature' => $signature,
             'buttonStyle'        => core()->getConfigData('sales.payment_methods.boldpayment.button_style') ?: 'dark-L',

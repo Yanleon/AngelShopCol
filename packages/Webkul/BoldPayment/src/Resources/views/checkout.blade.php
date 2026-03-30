@@ -6,8 +6,6 @@
     <div class="max-w-3xl mx-auto px-6 py-10 text-center">
         <div id="bold-button-container" class="flex justify-center"></div>
 
-        <script src="https://checkout.bold.co/library/boldPaymentButton.js"></script>
-
         <script>
             (function () {
                 const cfg = @json($config);
