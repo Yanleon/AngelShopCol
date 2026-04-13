@@ -25,6 +25,11 @@ Contáctanos
         </div>
 
         <div class="form-group mb-3">
+            <label>Número de teléfono:</label>
+            <input type="text" name="telefono" class="form-control">
+        </div>
+
+        <div class="form-group mb-3">
             <label>Mensaje:</label>
             <textarea name="mensaje" rows="4" class="form-control" required></textarea>
         </div>

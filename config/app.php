@@ -239,7 +239,7 @@ return [
         Webkul\User\Providers\UserServiceProvider::class,
         Webkul\Epayco\Providers\EpaycoServiceProvider::class,
         Webkul\BoldPayment\Providers\BoldPaymentServiceProvider::class,
-              
+        Contact\Providers\ContactServiceProvider::class,
 
     ])->toArray(),
 

@@ -2,6 +2,24 @@
 
 Estamos encantados de que formes parte de nuestra comunidad. Con nuestra plataforma, podrás gestionar tu tienda en línea de manera eficiente y potenciar tu negocio digital.
 
+## 🚀 Cambios desde Bagisto 2.0
+
+- **Bold Payment**: módulo propio configurable (merchant_id, api_key, secret_key, sandbox, estilo de botón, logo) con botón de pago directo en el checkout de una sola página.
+- **Epayco**: integración nativa con Smart Button, manejo de IPN y configuración de URLs de respuesta/confirmación y llaves (cust_id_client, p_key, public_key) desde Configuración → Métodos de pago.
+- **Checkout en un paso**: botones dedicados por método (PayPal, Epayco y Bold) para reducir fricción en el cierre de compra.
+- **Reporte de cupones**: nueva vista Marketing → Promociones → Usos de cupones con filtros y exportación, traducida al español.
+
+## 📚 Documentación detallada
+- [Visión general](docs/overview.md)
+- [Instalación y arranque](docs/setup.md)
+- [Configuración](docs/config.md)
+- [Pagos: Bold y Epayco](docs/payments.md)
+- [Funcionalidades clave](docs/features.md)
+- [Guía para administradores](docs/admin-guide.md)
+- [Despliegue](docs/deploy.md)
+- [Solución de problemas](docs/troubleshooting.md)
+- [Changelog desde 2.0](docs/changelog.md)
+
 ## 📌 Tus datos de acceso
 - **URL de acceso:** https://tudominio.com/admin 
 - **Usuario:** 

@@ -446,6 +446,16 @@ return [
         'route' => 'admin.marketing.communications.subscribers.delete',
         'sort'  => 2,
     ], [
+        'key'   => 'marketing.communications.contact_forms',
+        'name'  => 'admin::app.marketing.communications.contact-forms.title',
+        'route' => 'admin.marketing.communications.contact_forms.index',
+        'sort'  => 4,
+    ], [
+        'key'   => 'marketing.communications.contact_forms.delete',
+        'name'  => 'admin::app.acl.delete',
+        'route' => 'admin.marketing.communications.contact_forms.delete',
+        'sort'  => 5,
+    ], [
         'key'   => 'marketing.search_seo',
         'name'  => 'admin::app.acl.search-seo',
         'route' => 'admin.marketing.search_seo.url_rewrites.index',

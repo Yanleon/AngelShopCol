@@ -2,6 +2,10 @@
 @inject ('productViewHelper', 'Webkul\Product\Helpers\View')
 
 @php
+    $facebookPixelId = config('services.facebook.pixel_id');
+@endphp
+
+@php
     $avgRatings = $reviewHelper->getAverageRating($product);
 
     $percentageRatings = $reviewHelper->getPercentageRating($product);
@@ -639,3 +643,23 @@
         </script>
     @endPushOnce
 </x-shop::layouts>
+
+@push('facebook-pixel')
+    @if ($facebookPixelId)
+        @php
+            $facebookPixelViewContent = [
+                'content_ids'   => [$product->sku ?: $product->id],
+                'content_name'  => $product->name,
+                'content_type'  => 'product',
+                'value'         => round((float) $product->getTypeInstance()->getMinimalPrice(), 2),
+                'currency'      => core()->getCurrentCurrencyCode(),
+            ];
+        @endphp
+
+        <script>
+            if (window.fbq) {
+                fbq('track', 'ViewContent', {!! json_encode($facebookPixelViewContent) !!});
+            }
+        </script>
+    @endif
+@endpush

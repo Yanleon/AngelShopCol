@@ -83,4 +83,27 @@
 			{{ view_render_event('bagisto.shop.checkout.success.continue-shopping.after', ['order' => $order]) }}
 		</div>
 	</div>
+
+    @push('facebook-pixel')
+        @php
+            $facebookPixelId = config('services.facebook.pixel_id');
+        @endphp
+
+        @if ($facebookPixelId)
+            @php
+                $facebookPixelPurchase = [
+                    'content_ids'  => $order->items->pluck('sku')->filter()->values()->all(),
+                    'content_type' => 'product',
+                    'value'        => round((float) $order->grand_total, 2),
+                    'currency'     => $order->order_currency_code,
+                ];
+            @endphp
+
+            <script>
+                if (window.fbq) {
+                    fbq('track', 'Purchase', {!! json_encode($facebookPixelPurchase) !!});
+                }
+            </script>
+        @endif
+    @endpush
 </x-shop::layouts>

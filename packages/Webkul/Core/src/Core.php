@@ -91,6 +91,33 @@ class Core
     protected $singletonInstances = [];
 
     /**
+     * Country whitelist for storefront (LATAM only).
+     */
+    protected array $allowedCountryCodes = [
+        'AR', // Argentina
+        'BO', // Bolivia
+        'BR', // Brasil
+        'CL', // Chile
+        'CO', // Colombia
+        'CR', // Costa Rica
+        'CU', // Cuba
+        'DO', // República Dominicana
+        'EC', // Ecuador
+        'SV', // El Salvador
+        'GT', // Guatemala
+        'HT', // Haití
+        'HN', // Honduras
+        'MX', // México
+        'NI', // Nicaragua
+        'PA', // Panamá
+        'PY', // Paraguay
+        'PE', // Perú
+        'PR', // Puerto Rico
+        'UY', // Uruguay
+        'VE', // Venezuela
+    ];
+
+    /**
      * Create a new instance.
      *
      * @return void
@@ -672,7 +699,13 @@ class Core
      */
     public function countries()
     {
-        return DB::table('countries')->get();
+        $query = DB::table('countries');
+
+        if (! empty($this->allowedCountryCodes)) {
+            $query->whereIn('code', $this->allowedCountryCodes);
+        }
+
+        return $query->get();
     }
 
     /**
@@ -708,7 +741,13 @@ class Core
     {
         $collection = [];
 
-        foreach (DB::table('country_states')->get() as $state) {
+        $statesQuery = DB::table('country_states');
+
+        if (! empty($this->allowedCountryCodes)) {
+            $statesQuery->whereIn('country_code', $this->allowedCountryCodes);
+        }
+
+        foreach ($statesQuery->get() as $state) {
             $collection[$state->country_code][] = $state;
         }
 

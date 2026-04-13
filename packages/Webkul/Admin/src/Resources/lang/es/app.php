@@ -1904,12 +1904,36 @@ return [
                 'delete-success' => 'Suscriptor eliminado con éxito',
                 'delete-warning' => '¿Estás seguro de que quieres realizar esta acción?',
             ],
+
+            'contact-forms' => [
+                'title'          => 'Formularios de contacto',
+                'id'             => 'ID',
+                'name'           => 'Nombre',
+                'email'          => 'Correo',
+                'phone'          => 'Teléfono',
+                'subject'        => 'Asunto',
+                'message'        => 'Mensaje',
+                'reply'          => 'Respuesta',
+                'created-at'     => 'Recibido',
+                'delete-success' => 'Formulario eliminado correctamente',
+            ],
         ],
 
         'promotions' => [
             'index' => [
                 'cart-rule-title'    => 'Reglas del Carrito',
                 'catalog-rule-title' => 'Reglas de Catálogo',
+            ],
+
+            'coupon-usage' => [
+                'title'        => 'Usos de cupones',
+                'coupon-code'  => 'Código de cupón',
+                'order-id'     => 'Pedido',
+                'customer'     => 'Cliente',
+                'channel'      => 'Canal',
+                'grand-total'  => 'Total',
+                'discount'     => 'Descuento',
+                'placed-at'    => 'Fecha',
             ],
 
             'cart-rules' => [
@@ -3464,34 +3488,34 @@ return [
                     ],
                 ],
                 'social-media' => [
-                    'title' => 'Redes sociales',
-                    'info'  => 'Configurar enlaces de redes sociales.',
+                    'title'    => 'Redes sociales',
+                    'info'     => 'Configurar enlaces de redes sociales.',
                     'facebook' => [
                         'title' => 'Facebook',
-                        'info' => 'Configurar enlaces de facebook.',
-                        'link' => 'Enlace de Facebook',
+                        'info'  => 'Configurar enlaces de facebook.',
+                        'link'  => 'Enlace de Facebook',
                     ],
                     'twitter' => [
                         'title' => 'Twitter',
-                        'info' => 'Configurar enlaces de twitter.',
-                        'link' => 'Enlace de Twitter',
+                        'info'  => 'Configurar enlaces de twitter.',
+                        'link'  => 'Enlace de Twitter',
                     ],
                     'instagram' => [
                         'title' => 'Instagram',
-                        'info' => 'Configurar enlaces de instagram.',
-                        'link' => 'Enlace de Instagram',
+                        'info'  => 'Configurar enlaces de instagram.',
+                        'link'  => 'Enlace de Instagram',
                     ],
                     'youtube' => [
                         'title' => 'Youtube',
-                        'info' => 'Configurar enlaces de youtube.',
-                        'link' => 'Enlace de Youtube',
+                        'info'  => 'Configurar enlaces de youtube.',
+                        'link'  => 'Enlace de Youtube',
                     ],
                     'tiktok' => [
                         'title' => 'Tiktok',
-                        'info' => 'Configurar enlaces de tiktok.',
-                        'link' => 'Enlace de Tiktok',
+                        'info'  => 'Configurar enlaces de tiktok.',
+                        'link'  => 'Enlace de Tiktok',
                     ],
-                ]
+                ],
             ],
 
             'catalog' => [
@@ -4353,6 +4377,7 @@ return [
         'locales'                  => 'Idiomas',
         'marketing'                => 'Marketing',
         'newsletter-subscriptions' => 'Suscripciones al Boletín',
+        'contact-forms'            => 'Formularios de contacto',
         'note'                     => 'Nota',
         'orders'                   => 'Pedidos',
         'products'                 => 'Productos',

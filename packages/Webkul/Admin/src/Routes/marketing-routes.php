@@ -2,12 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 use Webkul\Admin\Http\Controllers\Marketing\Communications\CampaignController;
+use Webkul\Admin\Http\Controllers\Marketing\Communications\ContactFormController;
 use Webkul\Admin\Http\Controllers\Marketing\Communications\EventController;
 use Webkul\Admin\Http\Controllers\Marketing\Communications\SubscriptionController;
 use Webkul\Admin\Http\Controllers\Marketing\Communications\TemplateController;
 use Webkul\Admin\Http\Controllers\Marketing\Promotions\CartRuleController;
 use Webkul\Admin\Http\Controllers\Marketing\Promotions\CartRuleCouponController;
 use Webkul\Admin\Http\Controllers\Marketing\Promotions\CatalogRuleController;
+use Webkul\Admin\Http\Controllers\Marketing\Promotions\CouponUsageController;
 use Webkul\Admin\Http\Controllers\Marketing\SearchSEO\SearchSynonymController;
 use Webkul\Admin\Http\Controllers\Marketing\SearchSEO\SearchTermController;
 use Webkul\Admin\Http\Controllers\Marketing\SearchSEO\SitemapController;
@@ -69,6 +71,13 @@ Route::group(['middleware' => ['admin'], 'prefix' => config('app.admin_url')], f
                 Route::put('edit/{id}', 'update')->name('admin.marketing.promotions.catalog_rules.update');
 
                 Route::delete('edit/{id}', 'destroy')->name('admin.marketing.promotions.catalog_rules.delete');
+            });
+
+            /**
+             * Coupon usage report.
+             */
+            Route::controller(CouponUsageController::class)->prefix('coupon-usage')->group(function () {
+                Route::get('', 'index')->name('admin.marketing.promotions.coupon_usage.index');
             });
         });
 
@@ -136,6 +145,14 @@ Route::group(['middleware' => ['admin'], 'prefix' => config('app.admin_url')], f
                 Route::put('edit', 'update')->name('admin.marketing.communications.subscribers.update');
 
                 Route::delete('edit/{id}', 'destroy')->name('admin.marketing.communications.subscribers.delete');
+            });
+
+            /**
+             * Contact forms routes.
+             */
+            Route::controller(ContactFormController::class)->prefix('contact-forms')->group(function () {
+                Route::get('', 'index')->name('admin.marketing.communications.contact_forms.index');
+                Route::delete('{id}', 'destroy')->name('admin.marketing.communications.contact_forms.delete');
             });
         });
 

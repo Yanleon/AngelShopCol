@@ -62,7 +62,7 @@ return [
             [
                 'name'    => 'number',
                 'title'   => 'Whatsapp',
-                'type'    => 'text'
+                'type'    => 'text',
             ],
         ],
     ],
@@ -75,7 +75,7 @@ return [
             [
                 'name'    => 'description',
                 'title'   => 'Mensaje Whatsapp',
-                'type'    => 'text'
+                'type'    => 'text',
             ],
         ],
     ],
@@ -151,6 +151,83 @@ return [
                 'type'          => 'image',
                 'channel_based' => false,
                 'validation'    => 'mimes:bmp,jpeg,jpg,png,webp,svg,ico',
+            ],
+        ],
+    ], [
+        'key'    => 'general.design.theme',
+        'name'   => 'Apariencia de tienda',
+        'info'   => 'Colores y tipografía del storefront.',
+        'sort'   => 2,
+        'fields' => [
+            [
+                'name'          => 'background_color',
+                'title'         => 'Color de fondo',
+                'type'          => 'color',
+                'default'       => '#ffffff',
+                'channel_based' => true,
+            ], [
+                'name'          => 'surface_color',
+                'title'         => 'Color de tarjetas/paneles',
+                'type'          => 'color',
+                'default'       => '#f7f7f7',
+                'channel_based' => true,
+            ], [
+                'name'          => 'button_color',
+                'title'         => 'Color de botones primarios',
+                'type'          => 'color',
+                'default'       => '#1b4db3',
+                'channel_based' => true,
+            ], [
+                'name'          => 'text_color',
+                'title'         => 'Color de texto',
+                'type'          => 'color',
+                'default'       => '#1f2937',
+                'channel_based' => true,
+            ], [
+                'name'          => 'heading_color',
+                'title'         => 'Color de titulares',
+                'type'          => 'color',
+                'default'       => '#111827',
+                'channel_based' => true,
+            ], [
+                'name'          => 'link_color',
+                'title'         => 'Color de enlaces',
+                'type'          => 'color',
+                'default'       => '#1b4db3',
+                'channel_based' => true,
+            ], [
+                'name'          => 'font_family',
+                'title'         => 'Tipografía base',
+                'type'          => 'text',
+                'default'       => 'Poppins',
+                'channel_based' => true,
+            ], [
+                'name'          => 'custom_font_url',
+                'title'         => 'URL de fuente personalizada (Google Fonts u otra)',
+                'type'          => 'text',
+                'channel_based' => true,
+            ], [
+                'name'          => 'custom_font_family',
+                'title'         => 'Nombre de fuente personalizada (font-family)',
+                'type'          => 'text',
+                'channel_based' => true,
+            ], [
+                'name'          => 'base_font_size',
+                'title'         => 'Tamaño base de fuente',
+                'type'          => 'text',
+                'default'       => '16px',
+                'channel_based' => true,
+            ], [
+                'name'          => 'card_radius',
+                'title'         => 'Radio de borde de tarjetas',
+                'type'          => 'text',
+                'default'       => '14px',
+                'channel_based' => true,
+            ], [
+                'name'          => 'design_custom_css',
+                'title'         => 'CSS adicional para diseño',
+                'type'          => 'textarea',
+                'channel_based' => true,
             ],
         ],
     ], [
@@ -358,7 +435,7 @@ return [
         'name' => 'admin::app.configuration.index.general.social-media.title',
         'info' => 'admin::app.configuration.index.general.social-media.info',
         'icon' => 'settings/social-media.svg',
-        'sort' => 5
+        'sort' => 5,
     ],
     [
         'key'    => 'general.social-media.facebook',
@@ -369,7 +446,7 @@ return [
             [
                 'name'    => 'content',
                 'title'   => 'admin::app.configuration.index.general.social-media.facebook.link',
-                'type'    => 'text'
+                'type'    => 'text',
             ],
         ],
     ],
@@ -382,7 +459,7 @@ return [
             [
                 'name'    => 'content',
                 'title'   => 'admin::app.configuration.index.general.social-media.twitter.link',
-                'type'    => 'text'
+                'type'    => 'text',
             ],
         ],
     ],
@@ -395,7 +472,7 @@ return [
             [
                 'name'    => 'content',
                 'title'   => 'admin::app.configuration.index.general.social-media.instagram.link',
-                'type'    => 'text'
+                'type'    => 'text',
             ],
         ],
     ],
@@ -408,7 +485,7 @@ return [
             [
                 'name'    => 'content',
                 'title'   => 'admin::app.configuration.index.general.social-media.tiktok.link',
-                'type'    => 'text'
+                'type'    => 'text',
             ],
         ],
     ],
@@ -421,11 +498,10 @@ return [
             [
                 'name'    => 'content',
                 'title'   => 'admin::app.configuration.index.general.social-media.youtube.link',
-                'type'    => 'text'
+                'type'    => 'text',
             ],
         ],
     ],
-
 
     /**
      * Catalog.
@@ -2252,6 +2328,60 @@ return [
                 'info'    => 'admin::app.configuration.index.sales.checkout.shopping-cart.estimate-shipping-info',
                 'type'    => 'boolean',
                 'default' => 4,
+            ],
+        ],
+    ], [
+        'key'  => 'marketing',
+        'name' => 'Marketing',
+        'info' => 'Configuraciones de marketing.',
+        'icon' => 'settings/marketing.svg',
+        'sort' => 6,
+    ], [
+        'key'      => 'marketing.facebook_pixel',
+        'name'     => 'Pixel de Facebook',
+        'info'     => 'Configura el seguimiento con Facebook Pixel.',
+        'sort'     => 1,
+    ], [
+        'key'    => 'marketing.facebook_pixel.settings',
+        'name'   => 'Ajustes de integración',
+        'info'   => 'Activa el pixel, define el ID y controla los eventos.',
+        'sort'   => 1,
+        'fields' => [
+            [
+                'name'          => 'enable',
+                'title'         => 'Habilitar Facebook Pixel',
+                'type'          => 'boolean',
+                'default'       => false,
+                'channel_based' => true,
+            ], [
+                'name'          => 'pixel_id',
+                'title'         => 'ID de Pixel',
+                'type'          => 'text',
+                'channel_based' => true,
+            ], [
+                'name'          => 'debug_mode',
+                'title'         => 'Modo depuración (solo consola)',
+                'type'          => 'boolean',
+                'default'       => false,
+                'channel_based' => false,
+            ], [
+                'name'          => 'track_page_view',
+                'title'         => 'Enviar PageView',
+                'type'          => 'boolean',
+                'default'       => true,
+                'channel_based' => true,
+            ], [
+                'name'          => 'track_view_content',
+                'title'         => 'Enviar ViewContent',
+                'type'          => 'boolean',
+                'default'       => true,
+                'channel_based' => true,
+            ], [
+                'name'          => 'track_purchase',
+                'title'         => 'Enviar Purchase',
+                'type'          => 'boolean',
+                'default'       => true,
+                'channel_based' => true,
             ],
         ],
     ], [

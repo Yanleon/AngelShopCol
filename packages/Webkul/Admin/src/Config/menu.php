@@ -151,6 +151,12 @@ return [
         'sort'       => 2,
         'icon'       => '',
     ], [
+        'key'        => 'marketing.promotions.coupon_usage',
+        'name'       => 'admin::app.marketing.promotions.coupon-usage.title',
+        'route'      => 'admin.marketing.promotions.coupon_usage.index',
+        'sort'       => 3,
+        'icon'       => '',
+    ], [
         'key'        => 'marketing.communications',
         'name'       => 'admin::app.components.layouts.sidebar.communications',
         'route'      => 'admin.marketing.communications.email_templates.index',
@@ -179,6 +185,12 @@ return [
         'name'       => 'admin::app.components.layouts.sidebar.newsletter-subscriptions',
         'route'      => 'admin.marketing.communications.subscribers.index',
         'sort'       => 3,
+        'icon'       => '',
+    ], [
+        'key'        => 'marketing.communications.contact_forms',
+        'name'       => 'admin::app.marketing.communications.contact-forms.title',
+        'route'      => 'admin.marketing.communications.contact_forms.index',
+        'sort'       => 4,
         'icon'       => '',
     ], [
         'key'        => 'marketing.search_seo',

@@ -50,29 +50,102 @@
 
         @bagistoVite(['src/Resources/assets/css/app.css', 'src/Resources/assets/js/app.js'])
 
-        <link
-            rel="preload"
-            href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
-            as="style"
-        >
-        <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
-        >
+        @php
+            $themeBg       = core()->getConfigData('general.design.theme.background_color') ?: '#ffffff';
+            $themeSurface  = core()->getConfigData('general.design.theme.surface_color') ?: '#f7f7f7';
+            $themeButton   = core()->getConfigData('general.design.theme.button_color') ?: '#1b4db3';
+            $themeText     = core()->getConfigData('general.design.theme.text_color') ?: '#1f2937';
+            $themeHeading  = core()->getConfigData('general.design.theme.heading_color') ?: '#111827';
+            $themeLink     = core()->getConfigData('general.design.theme.link_color') ?: '#1b4db3';
+            $themeFont     = core()->getConfigData('general.design.theme.font_family') ?: 'Poppins';
+            $themeFontSize = core()->getConfigData('general.design.theme.base_font_size') ?: '16px';
+            $themeRadius   = core()->getConfigData('general.design.theme.card_radius') ?: '14px';
 
-        <link
-            rel="preload"
-            href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap"
-            as="style"
-        >
-        <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap"
-        >
+            $customFontUrl    = core()->getConfigData('general.design.theme.custom_font_url');
+            $customFontFamily = core()->getConfigData('general.design.theme.custom_font_family');
+        @endphp
+
+        @if ($customFontUrl)
+            <link
+                rel="preload"
+                href="{{ $customFontUrl }}"
+                as="style"
+            >
+            <link
+                rel="stylesheet"
+                href="{{ $customFontUrl }}"
+            >
+        @else
+            <link
+                rel="preload"
+                href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+                as="style"
+            >
+            <link
+                rel="stylesheet"
+                href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+            >
+        @endif
 
         @stack('styles')
 
+        @if (config('services.facebook.pixel_id'))
+            <script>
+                !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+                n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+                t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+
+                fbq('init', @json(config('services.facebook.pixel_id')));
+                fbq('track', 'PageView');
+            </script>
+        @endif
+
         <style>
+            :root {
+                --theme-bg: {{ $themeBg }};
+                --theme-surface: {{ $themeSurface }};
+                --theme-button: {{ $themeButton }};
+                --theme-text: {{ $themeText }};
+                --theme-heading: {{ $themeHeading }};
+                --theme-link: {{ $themeLink }};
+                --theme-font: '{{ $customFontFamily ?: $themeFont }}', sans-serif;
+                --theme-font-size: {{ $themeFontSize }};
+                --theme-radius: {{ $themeRadius }};
+            }
+
+            body {
+                background: var(--theme-bg);
+                color: var(--theme-text);
+                font-family: var(--theme-font);
+                font-size: var(--theme-font-size);
+            }
+
+            a {
+                color: var(--theme-link);
+            }
+
+            h1, h2, h3, h4, h5, h6 {
+                color: var(--theme-heading);
+            }
+
+            .primary-button,
+            .btn-primary,
+            button[type="submit"],
+            .rounded-2xl.bg-navyBlue,
+            .rounded-lg.bg-navyBlue {
+                background-color: var(--theme-button) !important;
+                border-color: var(--theme-button) !important;
+                border-radius: var(--theme-radius);
+            }
+
+            .box-shadow,
+            .card,
+            .bg-white {
+                background-color: var(--theme-surface);
+                border-radius: var(--theme-radius);
+            }
+
             {!! core()->getConfigData('general.content.custom_scripts.custom_css') !!}
         </style>
 
@@ -81,6 +154,16 @@
     </head>
 
     <body>
+        @if (config('services.facebook.pixel_id'))
+            <noscript>
+                <img
+                    height="1"
+                    width="1"
+                    style="display:none"
+                    src="https://www.facebook.com/tr?id={{ config('services.facebook.pixel_id') }}&ev=PageView&noscript=1"
+                />
+            </noscript>
+        @endif
         @if (core()->getConfigData('general.general.whatsapp.number'))
             <x-shop::whatsapp />
         @endif
@@ -127,6 +210,8 @@
         </div>
 
         {!! view_render_event('bagisto.shop.layout.body.after') !!}
+
+        @stack('facebook-pixel')
 
         @stack('scripts')
 
