@@ -76,10 +76,11 @@ class HomeController extends Controller
 
         try {
             Contact::create([
-                'nombre'  => $payload['name'],
-                'email'   => $payload['email'],
-                'phone'   => $payload['contact'] ?? null,
-                'mensaje' => $payload['message'],
+                'name'          => $payload['name'],
+                'email'         => $payload['email'],
+                'phone'         => $payload['contact'] ?? null,
+                'message_title' => 'Mensaje de contacto',
+                'message_body'  => $payload['message'],
             ]);
         } catch (\Throwable $e) {
             report($e);
