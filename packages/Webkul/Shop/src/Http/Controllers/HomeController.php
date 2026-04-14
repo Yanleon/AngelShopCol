@@ -2,6 +2,7 @@
 
 namespace Webkul\Shop\Http\Controllers;
 
+use Contact\Models\Contact;
 use Illuminate\Support\Facades\Mail;
 use Webkul\Shop\Http\Requests\ContactRequest;
 use Webkul\Shop\Mail\ContactUs;
@@ -66,13 +67,30 @@ class HomeController extends Controller
      */
     public function sendContactUsMail(ContactRequest $contactRequest)
     {
+        $payload = $contactRequest->only([
+            'name',
+            'email',
+            'contact',
+            'message',
+        ]);
+
         try {
-            Mail::queue(new ContactUs($contactRequest->only([
-                'name',
-                'email',
-                'contact',
-                'message',
-            ])));
+            Contact::create([
+                'nombre'  => $payload['name'],
+                'email'   => $payload['email'],
+                'phone'   => $payload['contact'] ?? null,
+                'mensaje' => $payload['message'],
+            ]);
+        } catch (\Throwable $e) {
+            report($e);
+
+            session()->flash('error', 'No se pudo guardar tu mensaje. Intenta nuevamente.');
+
+            return back()->withInput();
+        }
+
+        try {
+            Mail::queue(new ContactUs($payload));
 
             session()->flash('success', trans('shop::app.home.thanks-for-contact'));
         } catch (\Exception $e) {

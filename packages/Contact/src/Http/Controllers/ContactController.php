@@ -27,12 +27,10 @@ class ContactController extends Controller
         ]);
 
         $contact = Contact::create([
-            'name'          => $request->nombre,
-            'email'         => $request->email,
-            'phone'         => $request->input('telefono'),
-            'message_title' => $request->input('asunto', 'Mensaje de contacto'),
-            'message_body'  => $request->mensaje,
-            'message_reply' => $request->input('respuesta'),
+            'nombre'  => $request->nombre,
+            'email'   => $request->email,
+            'phone'   => $request->input('telefono'),
+            'mensaje' => $request->mensaje,
         ]);
 
         $adminEmail = config('mail.from.address') ?: 'admin@example.com';
