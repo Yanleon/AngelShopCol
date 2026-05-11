@@ -443,6 +443,10 @@ return [
                 'subscribe-stay-touch'   => 'Suscríbete para mantenerte en contacto.',
                 'whats-new'              => 'Novedades',
             ],
+
+            'popup-widget' => [
+                'dont-show-again' => 'No mostrar de nuevo',
+            ],
         ],
 
         'datagrid' => [
