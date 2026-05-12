@@ -5,6 +5,10 @@
 
     @php
         $viewMode = request('view') === 'table' ? 'table' : 'cards';
+        $isStatusActive = request('filters.status.0') === '1';
+        $isStatusDraft = request('filters.status.0') === '0';
+        $isLowStock = request('stock') === 'low';
+        $isAllProducts = ! $isStatusActive && ! $isStatusDraft && ! $isLowStock;
     @endphp
 
     <div class="{{ $viewMode === 'cards' ? 'products-cards-mode' : 'products-table-mode' }}">
@@ -34,16 +38,14 @@
         </div>
 
         <div class="mt-6 grid grid-cols-4 gap-3 max-xl:grid-cols-2 max-md:grid-cols-1">
-            <div class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
+            <a
+                href="{{ route('admin.catalog.products.index', ['view' => $viewMode]) }}"
+                class="rounded-xl border-2 bg-white p-4 transition duration-150 hover:-translate-y-0.5 hover:shadow-md dark:bg-gray-900 {{ $isAllProducts ? 'border-blue-500 ring-2 ring-blue-100 dark:ring-blue-900/40' : 'border-blue-200/70 dark:border-blue-800/40' }}"
+                style="box-shadow: inset 0 3px 0 rgba(37, 99, 235, 0.22);"
+            >
                 <div class="flex items-center gap-3">
-                    <span class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 text-xl text-blue-600">
-                        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 2 3 7l9 5 9-5-9-5Z"></path>
-                            <path d="M3 17l9 5 9-5"></path>
-                            <path d="M3 7v10"></path>
-                            <path d="M21 7v10"></path>
-                            <path d="M12 12v10"></path>
-                        </svg>
+                    <span class="flex h-11 w-11 items-center justify-center rounded-full bg-blue-50 text-blue-600">
+                        <span style="font-size: 20px; line-height: 1; color:#2563eb;">▣</span>
                     </span>
 
                     <div>
@@ -51,15 +53,16 @@
                         <p class="text-sm text-gray-500">Total productos</p>
                     </div>
                 </div>
-            </div>
+            </a>
 
-            <div class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
+            <a
+                href="{{ route('admin.catalog.products.index', array_merge(request()->query(), ['view' => $viewMode, 'filters' => array_merge((array) request('filters', []), ['status' => [1]])])) }}"
+                class="rounded-xl border-2 bg-white p-4 transition duration-150 hover:-translate-y-0.5 hover:shadow-md dark:bg-gray-900 {{ $isStatusActive ? 'border-green-500 ring-2 ring-green-100 dark:ring-green-900/40' : 'border-green-200/70 dark:border-green-800/40' }}"
+                style="box-shadow: inset 0 3px 0 rgba(22, 163, 74, 0.22);"
+            >
                 <div class="flex items-center gap-3">
-                    <span class="flex h-10 w-10 items-center justify-center rounded-full bg-green-50 text-xl text-green-600">
-                        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="9"></circle>
-                            <path d="m8 12 2.5 2.5L16 9"></path>
-                        </svg>
+                    <span class="flex h-11 w-11 items-center justify-center rounded-full bg-green-50 text-green-600">
+                        <span style="font-size: 20px; line-height: 1; color:#16a34a;">✔</span>
                     </span>
 
                     <div>
@@ -67,16 +70,16 @@
                         <p class="text-sm text-gray-500">Activos</p>
                     </div>
                 </div>
-            </div>
+            </a>
 
-            <div class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
+            <a
+                href="{{ route('admin.catalog.products.index', array_merge(request()->query(), ['view' => $viewMode, 'stock' => 'low'])) }}"
+                class="rounded-xl border-2 bg-white p-4 transition duration-150 hover:-translate-y-0.5 hover:shadow-md dark:bg-gray-900 {{ $isLowStock ? 'border-orange-500 ring-2 ring-orange-100 dark:ring-orange-900/40' : 'border-orange-200/80 dark:border-orange-800/40' }}"
+                style="box-shadow: inset 0 3px 0 rgba(249, 115, 22, 0.22);"
+            >
                 <div class="flex items-center gap-3">
-                    <span class="flex h-10 w-10 items-center justify-center rounded-full bg-orange-50 text-xl text-orange-500">
-                        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 3 2 21h20L12 3Z"></path>
-                            <path d="M12 9v5"></path>
-                            <path d="M12 18h.01"></path>
-                        </svg>
+                    <span class="flex h-11 w-11 items-center justify-center rounded-full bg-orange-50 text-orange-500">
+                        <span style="font-size: 20px; line-height: 1; color:#f97316;">⚠</span>
                     </span>
 
                     <div>
@@ -84,17 +87,16 @@
                         <p class="text-sm text-gray-500">Bajo stock</p>
                     </div>
                 </div>
-            </div>
+            </a>
 
-            <div class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
+            <a
+                href="{{ route('admin.catalog.products.index', array_merge(request()->query(), ['view' => $viewMode, 'filters' => array_merge((array) request('filters', []), ['status' => [0]])])) }}"
+                class="rounded-xl border-2 bg-white p-4 transition duration-150 hover:-translate-y-0.5 hover:shadow-md dark:bg-gray-900 {{ $isStatusDraft ? 'border-violet-500 ring-2 ring-violet-100 dark:ring-violet-900/40' : 'border-violet-200/80 dark:border-violet-800/40' }}"
+                style="box-shadow: inset 0 3px 0 rgba(139, 92, 246, 0.22);"
+            >
                 <div class="flex items-center gap-3">
-                    <span class="flex h-10 w-10 items-center justify-center rounded-full bg-violet-50 text-xl text-violet-500">
-                        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z"></path>
-                            <path d="M14 2v5h5"></path>
-                            <path d="M9 13h6"></path>
-                            <path d="M9 17h6"></path>
-                        </svg>
+                    <span class="flex h-11 w-11 items-center justify-center rounded-full bg-violet-50 text-violet-500">
+                        <span style="font-size: 20px; line-height: 1; color:#8b5cf6;">📄</span>
                     </span>
 
                     <div>
@@ -102,7 +104,7 @@
                         <p class="text-sm text-gray-500">Borradores</p>
                     </div>
                 </div>
-            </div>
+            </a>
         </div>
 
         <div class="mt-4 flex items-center gap-2">
@@ -318,9 +320,12 @@
             }
 
             .products-table-mode .table-responsive .row p,
-            .products-table-mode .table-responsive .row span,
             .products-table-mode .table-responsive .row a {
                 font-size: 12px;
+            }
+
+            .products-table-mode .table-responsive .row .text-2xl {
+                font-size: 22px !important;
             }
 
             .products-table-mode .table-responsive .row p {

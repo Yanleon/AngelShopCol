@@ -182,7 +182,7 @@ class ProductDataGrid extends DataGrid
 
                 $url = Storage::url($row->base_image);
 
-                return '<img src="'.$url.'" alt="product" class="h-10 w-10 rounded object-cover" />';
+                return '<img src="'.$url.'" alt="product" class="h-16 w-16 rounded object-cover" />';
             },
         ]);
 
