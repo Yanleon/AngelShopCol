@@ -18,6 +18,7 @@ Estamos encantados de que formes parte de nuestra comunidad. Con nuestra platafo
 - [Pagos: Bold y Epayco](docs/payments.md)
 - [Funcionalidades clave](docs/features.md)
 - [Guía para administradores](docs/admin-guide.md)
+- [Rediseño Admin de Productos](docs/admin-products-redesign.md)
 - [Despliegue](docs/deploy.md)
 - [Solución de problemas](docs/troubleshooting.md)
 - [Changelog desde 2.0](docs/changelog.md)
@@ -106,3 +107,9 @@ ln -s storage/app/public public/storage
 ---
 
 ✅ ¡Listo! Ahora puedes proceder con la configuración final y el despliegue de la aplicación. 🚀
+
+## 🛍️ Rediseño del Admin de Productos
+
+La documentación completa del rediseño aplicado en la vista de productos del admin está en:
+
+- `docs/admin-products-redesign.md`
