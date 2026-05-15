@@ -148,6 +148,10 @@ class ThemeCustomizationRepository extends Repository
         if (isset($data[$locale]['deleted_sliders'])) {
             foreach ($data[$locale]['deleted_sliders'] as $slider) {
                 Storage::delete(str_replace('storage/', '', $slider['image']));
+
+                if (! empty($slider['mobile_image'])) {
+                    Storage::delete(str_replace('storage/', '', $slider['mobile_image']));
+                }
             }
         }
 
@@ -155,16 +159,22 @@ class ThemeCustomizationRepository extends Repository
             return;
         }
 
-        $options = [];
+        $options = [
+            'mobile_overlay' => max(0, min(40, (int) ($data[$locale]['options']['mobile_overlay'] ?? 15))),
+        ];
 
-        foreach ($data[$locale]['options'] as $image) {
+        foreach ($data[$locale]['options'] as $key => $image) {
+            if ($key === 'mobile_overlay' || ! is_array($image)) {
+                continue;
+            }
+
             if (isset($image['service_icon'])) {
                 $options['services'][] = [
                     'service_icon' => $image['service_icon'],
                     'description'  => $image['description'],
                     'title'        => $image['title'],
                 ];
-            } elseif ($image['image'] instanceof UploadedFile) {
+            } elseif (($image['image'] ?? null) instanceof UploadedFile) {
                 try {
                     $manager = new ImageManager();
 
@@ -181,12 +191,45 @@ class ThemeCustomizationRepository extends Repository
                     return Storage::url($path);
                 }
 
+                $mobileImagePath = $image['mobile_image'] ?? null;
+
+                if ($mobileImagePath instanceof UploadedFile) {
+                    try {
+                        $mobilePath = 'theme/'.$theme->id.'/'.Str::random(40).'.webp';
+
+                        Storage::put($mobilePath, $manager->make($mobileImagePath)->encode('webp'));
+
+                        $mobileImagePath = 'storage/'.$mobilePath;
+                    } catch (\Exception $e) {
+                        session()->flash('error', $e->getMessage());
+
+                        return redirect()->back();
+                    }
+                }
+
                 $options['images'][] = [
-                    'image' => 'storage/'.$path,
-                    'link'  => $image['link'],
-                    'title' => $image['title'],
+                    'image'        => 'storage/'.$path,
+                    'mobile_image' => $mobileImagePath,
+                    'link'         => $image['link'],
+                    'title'        => $image['title'],
                 ];
             } else {
+                if (($image['mobile_image'] ?? null) instanceof UploadedFile) {
+                    try {
+                        $manager = new ImageManager();
+
+                        $mobilePath = 'theme/'.$theme->id.'/'.Str::random(40).'.webp';
+
+                        Storage::put($mobilePath, $manager->make($image['mobile_image'])->encode('webp'));
+
+                        $image['mobile_image'] = 'storage/'.$mobilePath;
+                    } catch (\Exception $e) {
+                        session()->flash('error', $e->getMessage());
+
+                        return redirect()->back();
+                    }
+                }
+
                 $options['images'][] = $image;
             }
         }
