@@ -24,7 +24,7 @@
                     <!-- Add Slider Button -->
                     <div
                         class="secondary-button"
-                        @click="$refs.addSliderModal.toggle()"
+                        @click="openCreateModal"
                     >
                         @lang('admin::app.settings.themes.edit.slider-add-btn')
                     </div>
@@ -183,6 +183,13 @@
 
                         <!-- Actions -->
                         <div class="grid place-content-start gap-1 text-right">
+                            <p
+                                class="cursor-pointer text-blue-600 transition-all hover:underline"
+                                @click="edit(image, index)"
+                            >
+                                Editar
+                            </p>
+
                             <p 
                                 class="cursor-pointer text-red-600 transition-all hover:underline"
                                 @click="remove(image)"
@@ -229,66 +236,73 @@
                         <!-- Modal Header -->
                         <x-slot:header>
                             <p class="text-lg font-bold text-gray-800 dark:text-white">
-                                @lang('admin::app.settings.themes.edit.update-slider')
+                                @{{ editIndex === null ? 'Agregar deslizador' : 'Editar deslizador' }}
                             </p>
                         </x-slot>
 
                         <!-- Modal Content -->
                         <x-slot:content>
-                            <x-admin::form.control-group>
-                                <x-admin::form.control-group.label class="required">
-                                    @lang('admin::app.settings.themes.edit.image-title')
-                                </x-admin::form.control-group.label>
+                            <div class="grid gap-3">
+                                <div>
+                                    <label class="required mb-1.5 block text-xs font-medium text-gray-800 dark:text-white">
+                                        @lang('admin::app.settings.themes.edit.image-title')
+                                    </label>
 
-                                <x-admin::form.control-group.control
-                                    type="text"
-                                    name="{{ $currentLocale->code }}[title]"
-                                    rules="required"
-                                    :placeholder="trans('admin::app.settings.themes.edit.image-title')"
-                                    :label="trans('admin::app.settings.themes.edit.image-title')"
-                                />
+                                    <input
+                                        type="text"
+                                        v-model="sliderForm.title"
+                                        class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                                        :placeholder="`{{ trans('admin::app.settings.themes.edit.image-title') }}`"
+                                    />
+                                </div>
 
-                                <x-admin::form.control-group.error control-name="{{ $currentLocale->code }}[title]" />
-                            </x-admin::form.control-group>
+                                <div>
+                                    <label class="mb-1.5 block text-xs font-medium text-gray-800 dark:text-white">
+                                        @lang('admin::app.settings.themes.edit.link')
+                                    </label>
 
-                            <x-admin::form.control-group>
-                                <x-admin::form.control-group.label>
-                                    @lang('admin::app.settings.themes.edit.link')
-                                </x-admin::form.control-group.label>
+                                    <input
+                                        type="text"
+                                        v-model="sliderForm.link"
+                                        class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                                        :placeholder="`{{ trans('admin::app.settings.themes.edit.link') }}`"
+                                    />
+                                </div>
 
-                                <x-admin::form.control-group.control
-                                    type="text"
-                                    name="{{ $currentLocale->code }}[link]"
-                                    :placeholder="trans('admin::app.settings.themes.edit.link')"
-                                />
-                            </x-admin::form.control-group>
+                                <div>
+                                    <label class="mb-1.5 block text-xs font-medium text-gray-800 dark:text-white">
+                                        @lang('admin::app.settings.themes.edit.slider-image')
+                                    </label>
 
-                            <x-admin::form.control-group>
-                                <x-admin::form.control-group.label class="required">
-                                    @lang('admin::app.settings.themes.edit.slider-image')
-                                </x-admin::form.control-group.label>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        @change="onDesktopFileChange"
+                                        class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                                    />
 
-                                <x-admin::form.control-group.control
-                                    type="image"
-                                    name="slider_image"
-                                    rules="required"
-                                    :is-multiple="false"
-                                />
+                                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" v-if="sliderForm.image">
+                                        Actual: @{{ sliderForm.image }}
+                                    </p>
+                                </div>
 
-                                <x-admin::form.control-group.error control-name="slider_image" />
-                            </x-admin::form.control-group>
+                                <div>
+                                    <label class="mb-1.5 block text-xs font-medium text-gray-800 dark:text-white">
+                                        Banner movil
+                                    </label>
 
-                            <x-admin::form.control-group>
-                                <x-admin::form.control-group.label>
-                                    Banner movil
-                                </x-admin::form.control-group.label>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        @change="onMobileFileChange"
+                                        class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                                    />
 
-                                <x-admin::form.control-group.control
-                                    type="image"
-                                    name="slider_mobile_image"
-                                    :is-multiple="false"
-                                />
-                            </x-admin::form.control-group>
+                                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" v-if="sliderForm.mobile_image">
+                                        Actual: @{{ sliderForm.mobile_image }}
+                                    </p>
+                                </div>
+                            </div>
 
                             <p class="text-xs text-gray-600 dark:text-gray-300">
                                 @lang('admin::app.settings.themes.edit.image-size')
@@ -309,7 +323,7 @@
                                 type="submit"
                                 class="cursor-pointer rounded-md border border-blue-700 bg-blue-600 px-3 py-1.5 font-semibold text-gray-50"
                             >
-                                @lang('admin::app.settings.themes.edit.save-btn')
+                                @{{ editIndex === null ? 'Agregar' : 'Guardar cambios' }}
                             </button>
                         </x-slot>
                     </x-admin::modal>
@@ -329,6 +343,17 @@
                     sliders: @json($theme->translate($currentLocale->code)['options'] ?? null),
 
                     deletedSliders: [],
+
+                    editIndex: null,
+
+                    sliderForm: {
+                        title: '',
+                        link: '',
+                        image: '',
+                        mobile_image: '',
+                        desktopFile: null,
+                        mobileFile: null,
+                    },
                 };
             },
             
@@ -347,37 +372,101 @@
 
             methods: {
                 saveSliderImage(params, { resetForm ,setErrors }) {
-                    let formData = new FormData(this.$refs.createSliderForm);
-
                     try {
-                        const sliderImage = formData.get("slider_image[]");
-                        const sliderMobileImage = formData.get("slider_mobile_image[]");
+                        const sliderImage = this.sliderForm.desktopFile;
+                        const sliderMobileImage = this.sliderForm.mobileFile;
 
-                        if (! sliderImage) {
+                        if (
+                            this.editIndex === null
+                            && ! sliderImage
+                        ) {
                             throw new Error("{{ trans('admin::app.settings.themes.edit.slider-required') }}");
                         }
 
-                        this.sliders.images.push({
-                            title: formData.get("{{ $currentLocale->code }}[title]"),
-                            link: formData.get("{{ $currentLocale->code }}[link]"),
-                            slider_image: sliderImage,
-                            slider_mobile_image: sliderMobileImage,
-                        });
+                        if (this.editIndex === null) {
+                            this.sliders.images.push({
+                                title: this.sliderForm.title,
+                                link: this.sliderForm.link,
+                                slider_image: sliderImage,
+                                slider_mobile_image: sliderMobileImage,
+                            });
 
-                        if (sliderImage instanceof File) {
-                            this.setFile(sliderImage, this.sliders.images.length - 1);
-                        }
+                            if (sliderImage instanceof File) {
+                                this.setFile(sliderImage, this.sliders.images.length - 1);
+                            }
 
-                        if (sliderMobileImage instanceof File) {
-                            this.setMobileFile(sliderMobileImage, this.sliders.images.length - 1);
+                            if (sliderMobileImage instanceof File) {
+                                this.setMobileFile(sliderMobileImage, this.sliders.images.length - 1);
+                            }
+                        } else {
+                            const currentSlider = this.sliders.images[this.editIndex];
+
+                            currentSlider.title = this.sliderForm.title;
+                            currentSlider.link = this.sliderForm.link;
+
+                            if (sliderImage instanceof File) {
+                                this.setFile(sliderImage, this.editIndex);
+                            }
+
+                            if (sliderMobileImage instanceof File) {
+                                this.setMobileFile(sliderMobileImage, this.editIndex);
+                            }
                         }
 
                         resetForm();
+
+                        this.resetSliderForm();
 
                         this.$refs.addSliderModal.toggle();
                     } catch (error) {
                         setErrors({'slider_image': [error.message]});
                     }
+                },
+
+                edit(image, index) {
+                    this.editIndex = index;
+
+                    this.sliderForm = {
+                        title: image.title || '',
+                        link: image.link || '',
+                        image: image.image || '',
+                        mobile_image: image.mobile_image || '',
+                        desktopFile: null,
+                        mobileFile: null,
+                    };
+
+                    this.$refs.addSliderModal.toggle();
+                },
+
+                onDesktopFileChange(event) {
+                    const file = event.target.files?.[0] || null;
+
+                    this.sliderForm.desktopFile = file;
+                },
+
+                onMobileFileChange(event) {
+                    const file = event.target.files?.[0] || null;
+
+                    this.sliderForm.mobileFile = file;
+                },
+
+                resetSliderForm() {
+                    this.editIndex = null;
+
+                    this.sliderForm = {
+                        title: '',
+                        link: '',
+                        image: '',
+                        mobile_image: '',
+                        desktopFile: null,
+                        mobileFile: null,
+                    };
+                },
+
+                openCreateModal() {
+                    this.resetSliderForm();
+
+                    this.$refs.addSliderModal.toggle();
                 },
 
                 setFile(file, index) {
