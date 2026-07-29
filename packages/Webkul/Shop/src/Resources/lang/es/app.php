@@ -882,6 +882,18 @@ return [
         'thanks-for-contact' => 'Gracias por contactarnos con tus comentarios y preguntas. Te responderemos muy pronto.',
     ],
 
+    'promotions' => [
+        'default-title'       => 'Promociones del momento',
+        'default-description' => 'Descubre nuestras promociones, novedades y ofertas especiales en el catálogo vigente.',
+        'download-pdf'        => 'Descargar PDF',
+        'eyebrow'             => 'Catálogo digital',
+        'mobile-description'  => 'Abre el documento en el visor de tu dispositivo para consultar todas las promociones.',
+        'mobile-title'        => 'Consulta el catálogo completo',
+        'open-pdf'            => 'Abrir PDF',
+        'pdf-document'        => 'Documento PDF',
+        'viewer-label'        => 'Visor del catálogo de promociones',
+    ],
+
     'partials' => [
         'pagination' => [
             'pagination-showing' => 'Mostrando :firstItem a :lastItem de :total entradas',

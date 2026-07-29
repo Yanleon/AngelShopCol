@@ -74,6 +74,13 @@ class ThemeCustomizationTranslation extends Model implements ThemeCustomizationT
     public const POPUP_WIDGET = 'popup_widget';
 
     /**
+     * Promotional PDF page.
+     *
+     * @var string
+     */
+    public const PROMOTIONAL_PDF = 'promotional_pdf';
+
+    /**
      * Castable.
      *
      * @var array

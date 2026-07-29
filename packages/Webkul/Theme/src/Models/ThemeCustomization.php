@@ -85,6 +85,13 @@ class ThemeCustomization extends TranslatableModel implements ThemeCustomization
     public const POPUP_WIDGET = 'popup_widget';
 
     /**
+     * Promotional PDF page.
+     *
+     * @var string
+     */
+    public const PROMOTIONAL_PDF = 'promotional_pdf';
+
+    /**
      * Cast options field to array.
      *
      * @var array

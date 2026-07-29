@@ -3,11 +3,13 @@
 namespace Webkul\Theme\Repositories;
 
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
 use Webkul\Core\Eloquent\Repository;
 use Webkul\Theme\Contracts\ThemeCustomization;
+use Webkul\Theme\Models\ThemeCustomization as ThemeCustomizationModel;
 
 class ThemeCustomizationRepository extends Repository
 {
@@ -28,6 +30,9 @@ class ThemeCustomizationRepository extends Repository
     public function update($data, $id): ThemeCustomization
     {
         $locale = core()->getRequestedLocaleCode();
+        $oldPdfPath = null;
+        $newPdfPath = null;
+        $finalPdfPath = null;
 
         if ($data['type'] == 'static_content') {
             $data[$locale]['options']['html'] = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', '', $data[$locale]['options']['html']);
@@ -123,11 +128,71 @@ class ThemeCustomizationRepository extends Repository
             }
         }
 
+        if (($data['type'] ?? '') === ThemeCustomizationModel::PROMOTIONAL_PDF && isset($data[$locale]['options'])) {
+            $theme = $this->find($id);
+            $currentOptions = $theme->translations->firstWhere('locale', $locale)?->options ?? [];
+            $incomingOptions = $data[$locale]['options'];
+            $pdfFile = $incomingOptions['pdf_file'] ?? null;
+            $removePdf = (bool) ($incomingOptions['remove_pdf'] ?? false);
+
+            $oldPdfPath = $currentOptions['pdf_path'] ?? null;
+            $pdfPath = $oldPdfPath;
+            $pdfName = $currentOptions['pdf_name'] ?? null;
+
+            if ($removePdf && ! ($pdfFile instanceof UploadedFile)) {
+                $pdfPath = null;
+                $pdfName = null;
+            }
+
+            if ($pdfFile instanceof UploadedFile) {
+                $newPdfPath = $pdfFile->storeAs(
+                    'theme/'.$id,
+                    Str::random(40).'.pdf',
+                    'private'
+                );
+
+                if (! $newPdfPath) {
+                    throw new \RuntimeException('The promotional PDF could not be stored.');
+                }
+
+                $originalName = basename(str_replace('\\', '/', $pdfFile->getClientOriginalName()));
+                $pdfPath = $newPdfPath;
+                $pdfName = Str::limit(preg_replace('/[\x00-\x1F\x7F]/u', '', $originalName), 180, '');
+            }
+
+            $data[$locale]['options'] = array_filter([
+                'title'       => trim((string) ($incomingOptions['title'] ?? '')),
+                'description' => trim((string) ($incomingOptions['description'] ?? '')),
+                'pdf_path'    => $pdfPath,
+                'pdf_name'    => $pdfName,
+            ], fn ($value) => $value !== null && $value !== '');
+
+            $finalPdfPath = $pdfPath;
+        }
+
         if (in_array($data['type'], ['image_carousel', 'services_content'])) {
             unset($data[$locale]['options']);
         }
 
-        $theme = parent::update($data, $id);
+        try {
+            $theme = ($data['type'] ?? '') === ThemeCustomizationModel::PROMOTIONAL_PDF
+                ? DB::transaction(fn () => parent::update($data, $id))
+                : parent::update($data, $id);
+        } catch (\Throwable $exception) {
+            if ($newPdfPath) {
+                Storage::disk('private')->delete($newPdfPath);
+            }
+
+            throw $exception;
+        }
+
+        if (
+            $oldPdfPath
+            && $oldPdfPath !== $finalPdfPath
+            && str_starts_with($oldPdfPath, 'theme/'.$id.'/')
+        ) {
+            Storage::disk('private')->delete($oldPdfPath);
+        }
 
         if (in_array($data['type'], ['image_carousel', 'services_content'])) {
             $this->uploadImage(request()->all(), $theme);

@@ -200,6 +200,7 @@
                             services_content: "@lang('admin::app.settings.themes.create.type.services-content')",
                             footer_content: "@lang('admin::app.settings.themes.create.type.footer-content')",
                             popup_widget: "@lang('admin::app.settings.themes.create.type.popup-widget')",
+                            promotional_pdf: "@lang('admin::app.settings.themes.create.type.promotional-pdf')",
                         }
                     };
                 },

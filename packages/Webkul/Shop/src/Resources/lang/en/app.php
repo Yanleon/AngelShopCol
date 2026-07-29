@@ -881,6 +881,18 @@ return [
         'thanks-for-contact' => 'Thanks for contacting us with your comments and questions. We all respond to you very soon.',
     ],
 
+    'promotions' => [
+        'default-title'       => 'Current Promotions',
+        'default-description' => 'Explore our latest promotions, new arrivals, and special offers in the current catalog.',
+        'download-pdf'        => 'Download PDF',
+        'eyebrow'             => 'Digital catalog',
+        'mobile-description'  => 'Open the document in your device viewer to browse all current promotions.',
+        'mobile-title'        => 'View the complete catalog',
+        'open-pdf'            => 'Open PDF',
+        'pdf-document'        => 'PDF document',
+        'viewer-label'        => 'Promotional catalog viewer',
+    ],
+
     'partials' => [
         'pagination' => [
             'pagination-showing' => 'Showing :firstItem to :lastItem of :total entries',

@@ -6,10 +6,23 @@ use Webkul\Shop\Http\Controllers\HomeController;
 use Webkul\Shop\Http\Controllers\PageController;
 use Webkul\Shop\Http\Controllers\ProductController;
 use Webkul\Shop\Http\Controllers\ProductsCategoriesProxyController;
+use Webkul\Shop\Http\Controllers\PromotionsController;
 use Webkul\Shop\Http\Controllers\SearchController;
 use Webkul\Shop\Http\Controllers\SubscriptionController;
 
 Route::group(['middleware' => ['locale', 'theme', 'currency']], function () {
+    /**
+     * Promotional PDF page.
+     */
+    Route::get('promociones', [PromotionsController::class, 'index'])
+        ->name('shop.promotions.index');
+
+    Route::get('promociones/documento', [PromotionsController::class, 'document'])
+        ->name('shop.promotions.document');
+
+    Route::get('promociones/descargar', [PromotionsController::class, 'download'])
+        ->name('shop.promotions.download');
+
     /**
      * CMS pages.
      */

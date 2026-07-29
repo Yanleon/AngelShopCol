@@ -56,19 +56,20 @@ class Handler extends BaseHandler
     {
         $this->renderable(function (HttpException $exception, Request $request) {
             $path = $request->is(config('app.admin_url').'/*') ? 'admin' : 'shop';
+            $statusCode = $exception->getStatusCode();
 
-            $errorCode = in_array($exception->getStatusCode(), [401, 403, 404, 503])
-                ? $exception->getStatusCode()
+            $errorCode = in_array($statusCode, [401, 403, 404, 503])
+                ? $statusCode
                 : 500;
 
             if ($request->wantsJson()) {
                 return response()->json([
                     'error'       => trans("{$path}::app.errors.{$errorCode}.title"),
                     'description' => trans("{$path}::app.errors.{$errorCode}.description"),
-                ], $errorCode);
+                ], $statusCode, $exception->getHeaders());
             }
 
-            return response()->view("{$path}::errors.index", compact('errorCode'));
+            return response()->view("{$path}::errors.index", compact('errorCode'), $statusCode, $exception->getHeaders());
         });
     }
 
@@ -89,7 +90,7 @@ class Handler extends BaseHandler
                 ], $errorCode);
             }
 
-            return response()->view("{$path}::errors.index", compact('errorCode'));
+            return response()->view("{$path}::errors.index", compact('errorCode'), $errorCode);
         });
     }
 

@@ -178,6 +178,8 @@ Route::group(['middleware' => ['admin'], 'prefix' => config('app.admin_url')], f
 
             Route::post('edit/{id}', 'update')->name('admin.settings.themes.update');
 
+            Route::get('edit/{id}/promotional-pdf', 'viewPromotionalPdf')->name('admin.settings.themes.promotional_pdf');
+
             Route::delete('edit/{id}', 'destroy')->name('admin.settings.themes.delete');
         });
 

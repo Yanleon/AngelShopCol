@@ -108,6 +108,9 @@
 
                 <!-- Popup-widget Template -->
                 @includeWhen($theme->type === 'popup_widget', 'admin::settings.themes.edit.popup-widget')
+
+                <!-- Promotional PDF Template -->
+                @includeWhen($theme->type === 'promotional_pdf', 'admin::settings.themes.edit.promotional-pdf')
             </div>
 
             <!-- General -->
