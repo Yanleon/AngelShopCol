@@ -1,6 +1,7 @@
 <?php
 
 use Webkul\Core\Acl;
+use Webkul\Core\CookieConsent;
 use Webkul\Core\Core;
 use Webkul\Core\Menu;
 use Webkul\Core\SystemConfig;
@@ -12,6 +13,16 @@ if (! function_exists('core')) {
     function core(): Core
     {
         return app('core');
+    }
+}
+
+if (! function_exists('cookie_consent')) {
+    /**
+     * Return the cookie consent manager.
+     */
+    function cookie_consent(): CookieConsent
+    {
+        return app(CookieConsent::class);
     }
 }
 

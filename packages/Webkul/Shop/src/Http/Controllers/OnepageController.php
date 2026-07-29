@@ -78,7 +78,26 @@ class OnepageController extends Controller
             return redirect()->route('shop.checkout.cart.index');
         }
 
-        if (
+        $trackFacebookPixelPurchase = config('services.facebook.pixel_id')
+            && cookie_consent()->allows('marketing');
+
+        if (config('cookie-consent.enabled')) {
+            $purchaseSessionKey = 'cookie_consent.facebook_purchase.'.$order->id;
+
+            session()->put('cookie_consent.checkout_order_id', $order->id);
+
+            if (session()->has($purchaseSessionKey)) {
+                $trackFacebookPixelPurchase = false;
+            } elseif ($trackFacebookPixelPurchase) {
+                session()->put($purchaseSessionKey, true);
+            }
+        }
+
+        $checkoutMessageSessionKey = 'cookie_consent.checkout_message.'.$order->id;
+
+        if ($checkoutMessage = session($checkoutMessageSessionKey)) {
+            $order->checkout_message = $checkoutMessage;
+        } elseif (
             core()->getConfigData('general.magic_ai.settings.enabled')
             && core()->getConfigData('general.magic_ai.checkout_message.enabled')
             && ! empty(core()->getConfigData('general.magic_ai.checkout_message.prompt'))
@@ -93,11 +112,15 @@ class OnepageController extends Controller
                     ->ask();
 
                 $order->checkout_message = $response;
+
+                if (config('cookie-consent.enabled')) {
+                    session()->put($checkoutMessageSessionKey, $response);
+                }
             } catch (\Exception $e) {
             }
         }
 
-        return view('shop::checkout.success', compact('order'));
+        return view('shop::checkout.success', compact('order', 'trackFacebookPixelPurchase'));
     }
 
     /**

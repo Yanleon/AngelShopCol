@@ -8,6 +8,7 @@ use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Webkul\Core\Acl;
+use Webkul\Core\CookieConsent;
 use Webkul\Core\Core;
 use Webkul\Core\ElasticSearch;
 use Webkul\Core\Exceptions\Handler;
@@ -123,6 +124,8 @@ class CoreServiceProvider extends ServiceProvider
         $this->app->singleton('system_config', function () {
             return app()->make(SystemConfig::class);
         });
+
+        $this->app->singleton(CookieConsent::class);
 
         /**
          * Register ElasticSearch as a singleton.

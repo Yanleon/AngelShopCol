@@ -15,10 +15,18 @@ class Visitor extends BaseVisitor
      */
     public function visit(?Model $model = null)
     {
+        $routeName = $this->request->route()?->getName();
+
+        if (
+            is_string($routeName)
+            && str_starts_with($routeName, 'shop.')
+            && ! cookie_consent()->allows('analytics', $this->request)
+        ) {
+            return;
+        }
+
         foreach ($this->except as $path) {
             if ($this->request->is($path)) {
-                dd(1);
-
                 return;
             }
         }

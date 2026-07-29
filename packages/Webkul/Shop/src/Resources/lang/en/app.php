@@ -893,6 +893,32 @@ return [
         'viewer-label'        => 'Promotional catalog viewer',
     ],
 
+    'cookie-consent' => [
+        'accept-all'            => 'Accept all',
+        'always-active'         => 'Always active',
+        'analytics-description' => 'They help us understand how the store is used so we can improve its operation and content.',
+        'analytics-title'       => 'Analytics cookies',
+        'back'                  => 'Back',
+        'close'                 => 'Close cookie settings',
+        'description'           => 'We use essential cookies to keep the store working. Analytics and marketing cookies are activated only after your consent.',
+        'marketing-description' => 'They help measure campaigns, show relevant promotions, and enable tools such as Meta Pixel.',
+        'marketing-title'       => 'Marketing cookies',
+        'necessary-description' => 'They are required for the cart, security, sign-in, and the site’s basic preferences.',
+        'necessary-title'       => 'Necessary cookies',
+        'noscript'              => 'Optional cookies remain disabled because JavaScript is unavailable.',
+        'privacy-policy'        => 'Privacy policy',
+        'reject-all'            => 'Reject all',
+        'reopen'                => 'Cookie settings',
+        'save-error'            => 'Your choice could not be saved. Please try again.',
+        'save-settings'         => 'Save settings',
+        'saved'                 => 'Your cookie preferences have been saved.',
+        'settings'              => 'Cookie settings',
+        'settings-description'  => 'You can enable or disable optional categories. Necessary cookies always remain active.',
+        'settings-title'        => 'Cookie preferences',
+        'terms'                 => 'Terms and conditions',
+        'title'                 => 'We use cookies',
+    ],
+
     'partials' => [
         'pagination' => [
             'pagination-showing' => 'Showing :firstItem to :lastItem of :total entries',

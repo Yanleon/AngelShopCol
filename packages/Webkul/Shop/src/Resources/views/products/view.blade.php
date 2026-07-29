@@ -641,25 +641,23 @@
                 },
             });
         </script>
-    @endPushOnce
+        @endPushOnce
+
+    @push('scripts')
+        @if ($facebookPixelId && cookie_consent()->allows('marketing'))
+            @php
+                $facebookPixelViewContent = [
+                    'content_ids'   => [$product->sku ?: $product->id],
+                    'content_name'  => $product->name,
+                    'content_type'  => 'product',
+                    'value'         => round((float) $product->getTypeInstance()->getMinimalPrice(), 2),
+                    'currency'      => core()->getCurrentCurrencyCode(),
+                ];
+            @endphp
+
+            <script>
+                fbq('track', 'ViewContent', @js($facebookPixelViewContent));
+            </script>
+        @endif
+    @endpush
 </x-shop::layouts>
-
-@push('facebook-pixel')
-    @if ($facebookPixelId)
-        @php
-            $facebookPixelViewContent = [
-                'content_ids'   => [$product->sku ?: $product->id],
-                'content_name'  => $product->name,
-                'content_type'  => 'product',
-                'value'         => round((float) $product->getTypeInstance()->getMinimalPrice(), 2),
-                'currency'      => core()->getCurrentCurrencyCode(),
-            ];
-        @endphp
-
-        <script>
-            if (window.fbq) {
-                fbq('track', 'ViewContent', {!! json_encode($facebookPixelViewContent) !!});
-            }
-        </script>
-    @endif
-@endpush

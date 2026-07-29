@@ -87,9 +87,11 @@
             >
         @endif
 
+        <x-shop::cookie-consent :styles-only="true" />
+
         @stack('styles')
 
-        @if (config('services.facebook.pixel_id'))
+        @if (config('services.facebook.pixel_id') && cookie_consent()->allows('marketing'))
             <script>
                 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
                 n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
@@ -154,7 +156,7 @@
     </head>
 
     <body>
-        @if (config('services.facebook.pixel_id'))
+        @if (config('services.facebook.pixel_id') && cookie_consent()->allows('marketing'))
             <noscript>
                 <img
                     height="1"
@@ -183,8 +185,13 @@
             <!-- Confirm Modal Blade Component -->
             <x-shop::modal.confirm />
 
+            <!-- Cookie Consent -->
+            <x-shop::cookie-consent />
+
             <!-- Promotion Popup Widget -->
-            <x-shop::popup-widget />
+            @if (cookie_consent()->allows('marketing'))
+                <x-shop::popup-widget />
+            @endif
 
             <!-- Page Header Blade Component -->
             @if ($hasHeader)
@@ -214,7 +221,9 @@
 
         {!! view_render_event('bagisto.shop.layout.body.after') !!}
 
-        @stack('facebook-pixel')
+        @if (cookie_consent()->allows('marketing'))
+            @stack('facebook-pixel')
+        @endif
 
         @stack('scripts')
 
@@ -233,8 +242,10 @@
 
         {!! view_render_event('bagisto.shop.layout.vue-app-mount.after') !!}
 
-        <script type="text/javascript">
-            {!! core()->getConfigData('general.content.custom_scripts.custom_javascript') !!}
-        </script>
+        @if (cookie_consent()->allows('marketing'))
+            <script type="text/javascript">
+                {!! core()->getConfigData('general.content.custom_scripts.custom_javascript') !!}
+            </script>
+        @endif
     </body>
 </html>

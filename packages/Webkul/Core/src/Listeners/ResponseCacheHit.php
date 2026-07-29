@@ -14,6 +14,10 @@ class ResponseCacheHit
      */
     public function handle(ResponseCacheHitEvent $event)
     {
+        if (! cookie_consent()->allows('analytics', $event->request)) {
+            return;
+        }
+
         $log = visitor()->getLog();
 
         if (request()->route()->getName() == 'shop.home.index') {

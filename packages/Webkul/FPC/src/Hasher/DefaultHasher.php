@@ -27,6 +27,7 @@ class DefaultHasher extends BaseDefaultHasher
         $cacheNameSuffix = core()->getCurrentChannel()->code
             .'-'.core()->getCurrentLocale()->code
             .'-'.core()->getCurrentCurrency()->code
+            .'-'.cookie_consent()->cacheKey($request)
             .'-'.$this->cacheProfile->useCacheNameSuffix($request);
 
         return $cacheNameSuffix;

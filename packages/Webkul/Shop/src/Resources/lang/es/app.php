@@ -894,6 +894,32 @@ return [
         'viewer-label'        => 'Visor del catálogo de promociones',
     ],
 
+    'cookie-consent' => [
+        'accept-all'            => 'Aceptar todas',
+        'always-active'         => 'Siempre activas',
+        'analytics-description' => 'Nos ayudan a entender cómo se utiliza la tienda para mejorar su funcionamiento y contenido.',
+        'analytics-title'       => 'Cookies de analítica',
+        'back'                  => 'Volver',
+        'close'                 => 'Cerrar configuración de cookies',
+        'description'           => 'Utilizamos cookies esenciales para garantizar el funcionamiento de la tienda. Las cookies de analítica y marketing solo se activarán después de tu consentimiento.',
+        'marketing-description' => 'Permiten medir campañas, mostrar promociones relevantes y activar herramientas como Meta Pixel.',
+        'marketing-title'       => 'Cookies de marketing',
+        'necessary-description' => 'Son indispensables para el carrito, la seguridad, el inicio de sesión y las preferencias básicas del sitio.',
+        'necessary-title'       => 'Cookies necesarias',
+        'noscript'              => 'Las cookies opcionales permanecen desactivadas porque JavaScript no está disponible.',
+        'privacy-policy'        => 'Política de privacidad',
+        'reject-all'            => 'Rechazar todas',
+        'reopen'                => 'Configurar cookies',
+        'save-error'            => 'No fue posible guardar tu elección. Inténtalo nuevamente.',
+        'save-settings'         => 'Guardar configuración',
+        'saved'                 => 'Tus preferencias de cookies fueron guardadas.',
+        'settings'              => 'Configuración de cookies',
+        'settings-description'  => 'Puedes activar o desactivar las categorías opcionales. Las cookies necesarias siempre permanecen activas.',
+        'settings-title'        => 'Preferencias de cookies',
+        'terms'                 => 'Términos y condiciones',
+        'title'                 => 'Usamos cookies',
+    ],
+
     'partials' => [
         'pagination' => [
             'pagination-showing' => 'Mostrando :firstItem a :lastItem de :total entradas',

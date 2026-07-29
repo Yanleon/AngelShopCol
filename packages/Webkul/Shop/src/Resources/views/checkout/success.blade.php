@@ -84,12 +84,8 @@
 		</div>
 	</div>
 
-    @push('facebook-pixel')
-        @php
-            $facebookPixelId = config('services.facebook.pixel_id');
-        @endphp
-
-        @if ($facebookPixelId)
+    @push('scripts')
+        @if ($trackFacebookPixelPurchase)
             @php
                 $facebookPixelPurchase = [
                     'content_ids'  => $order->items->pluck('sku')->filter()->values()->all(),
@@ -100,9 +96,7 @@
             @endphp
 
             <script>
-                if (window.fbq) {
-                    fbq('track', 'Purchase', {!! json_encode($facebookPixelPurchase) !!});
-                }
+                fbq('track', 'Purchase', @js($facebookPixelPurchase));
             </script>
         @endif
     @endpush
