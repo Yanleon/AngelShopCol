@@ -128,7 +128,7 @@ class ThemeController extends Controller
                     'file',
                     'mimes:pdf',
                     'extensions:pdf',
-                    'max:20480',
+                    'max:51200',
                     function ($attribute, $file, $fail) {
                         if (! ($file instanceof UploadedFile) || ! $file->isValid()) {
                             return;

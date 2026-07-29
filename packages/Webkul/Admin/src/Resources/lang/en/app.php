@@ -3274,7 +3274,7 @@ return [
                     'page-title'       => 'Page title',
                     'page-description' => 'Description',
                     'pdf-file'         => 'PDF file',
-                    'pdf-hint'         => 'PDF files only, up to 20 MB. Uploading a new file replaces the current one.',
+                    'pdf-hint'         => 'PDF files only, up to 50 MB. Uploading a new file replaces the current one.',
                     'pdf-required'     => 'Select a PDF file before publishing this page.',
                     'invalid-pdf'      => 'Select a valid PDF file.',
                     'current-file'     => 'Current file',

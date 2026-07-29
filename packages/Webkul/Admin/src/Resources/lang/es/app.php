@@ -3300,7 +3300,7 @@ return [
                     'page-title'       => 'Título de la página',
                     'page-description' => 'Descripción',
                     'pdf-file'         => 'Archivo PDF',
-                    'pdf-hint'         => 'Solo archivos PDF de hasta 20 MB. Al subir uno nuevo se reemplazará el archivo actual.',
+                    'pdf-hint'         => 'Solo archivos PDF de hasta 50 MB. Al subir uno nuevo se reemplazará el archivo actual.',
                     'pdf-required'     => 'Debes seleccionar un archivo PDF para publicar esta página.',
                     'invalid-pdf'      => 'Selecciona un archivo PDF válido.',
                     'current-file'     => 'Archivo actual',
