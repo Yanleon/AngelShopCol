@@ -159,12 +159,10 @@ class ThemeCustomizationRepository extends Repository
             return;
         }
 
-        $options = [
-            'mobile_overlay' => max(0, min(40, (int) ($data[$locale]['options']['mobile_overlay'] ?? 15))),
-        ];
+        $options = [];
 
-        foreach ($data[$locale]['options'] as $key => $image) {
-            if ($key === 'mobile_overlay' || ! is_array($image)) {
+        foreach ($data[$locale]['options'] as $image) {
+            if (! is_array($image)) {
                 continue;
             }
 

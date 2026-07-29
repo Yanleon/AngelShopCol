@@ -1,10 +1,7 @@
 @props(['options'])
 
-<v-carousel
-    :images="{{ json_encode($options['images'] ?? []) }}"
-    :mobile-overlay="{{ (int) ($options['mobile_overlay'] ?? 15) }}"
->
-    <div class="hero-carousel-shell overflow-hidden bg-gradient-to-r from-rose-50 via-pink-50 to-rose-100 max-md:rounded-b-2xl">
+<v-carousel :images="{{ json_encode($options['images'] ?? []) }}">
+    <div class="hero-carousel-shell overflow-hidden">
         <div class="hero-carousel-media shimmer w-screen"></div>
     </div>
 </v-carousel>
@@ -12,21 +9,30 @@
 @pushOnce('styles')
     <style>
         .hero-carousel-media {
-            aspect-ratio: 1.25 / 1;
+            aspect-ratio: 1 / 1;
+            display: block;
             object-fit: contain;
             object-position: center;
-            background: transparent;
+        }
+
+        img.hero-carousel-media {
+            aspect-ratio: auto;
+            height: auto;
+        }
+
+        .hero-carousel-viewport {
+            transition: height 300ms ease;
         }
 
         @media (min-width: 768px) {
-            .hero-carousel-media {
+            .hero-carousel-media,
+            img.hero-carousel-media {
                 aspect-ratio: 2.743 / 1;
+                height: auto;
                 object-fit: cover;
-                background: transparent;
             }
 
             .hero-carousel-shell {
-                background: transparent;
                 border-radius: 0;
             }
         }
@@ -38,18 +44,20 @@
         type="text/x-template"
         id="v-carousel-template"
     >
-        <div class="relative m-auto flex w-full overflow-hidden">
+        <div
+            class="hero-carousel-viewport relative m-auto flex w-full overflow-hidden"
+            :style="isMobileView && carouselHeight ? { height: carouselHeight + 'px' } : {}"
+        >
             <!-- Slider -->
             <div 
-                class="inline-flex translate-x-0 cursor-pointer transition-transform duration-700 ease-out will-change-transform"
+                class="inline-flex translate-x-0 cursor-pointer items-start transition-transform duration-700 ease-out will-change-transform"
                 ref="sliderContainer"
             >
                 <div
-                    class="max-h-screen w-screen bg-cover bg-center bg-no-repeat"
+                    class="w-screen shrink-0 overflow-hidden"
                     v-for="(image, index) in images"
                     @click="visitLink(image)"
                     ref="slide"
-                    :style="getSlideBackgroundStyle(image)"
                 >
                     <x-shop::media.images.lazy
                         class="hero-carousel-media w-full max-w-full select-none shadow-[0_14px_28px_rgba(190,24,93,0.14)] transition-transform duration-300 ease-in-out md:shadow-none"
@@ -115,11 +123,6 @@
                     type: Array,
                     default: () => [],
                 },
-
-                mobileOverlay: {
-                    type: Number,
-                    default: 15,
-                },
             },
 
             data() {
@@ -136,6 +139,7 @@
                     direction: 'ltr',
                     startFrom: 1,
                     isMobileView: window.innerWidth < 768,
+                    carouselHeight: null,
                 };
             },
 
@@ -151,7 +155,21 @@
 
                 this.init();
 
+                this.updateCarouselHeight();
+
                 this.play();
+            },
+
+            beforeUnmount() {
+                clearInterval(this.autoPlayInterval);
+
+                cancelAnimationFrame(this.animationID);
+
+                window.removeEventListener('resize', this.handleResize);
+
+                this.slides.forEach(slide => {
+                    slide.querySelector('img')?.removeEventListener('load', this.updateCarouselHeight);
+                });
             },
 
             methods: {
@@ -163,7 +181,11 @@
                     }
 
                     this.slides.forEach((slide, index) => {
-                        slide.querySelector('img')?.addEventListener('dragstart', (e) => e.preventDefault());
+                        const image = slide.querySelector('img');
+
+                        image?.addEventListener('dragstart', (e) => e.preventDefault());
+
+                        image?.addEventListener('load', this.updateCarouselHeight);
 
                         slide.addEventListener('mousedown', this.handleDragStart);
 
@@ -187,6 +209,28 @@
                     this.isMobileView = window.innerWidth < 768;
 
                     this.setPositionByIndex();
+                },
+
+                updateCarouselHeight() {
+                    if (! this.isMobileView) {
+                        this.carouselHeight = null;
+
+                        return;
+                    }
+
+                    this.$nextTick(() => {
+                        const activeSlide = this.slides[Math.abs(this.currentIndex)];
+                        const image = activeSlide?.querySelector('img');
+                        const slideWidth = activeSlide?.getBoundingClientRect().width || window.innerWidth;
+
+                        if (! image?.naturalWidth || ! image?.naturalHeight) {
+                            this.carouselHeight = Math.round(slideWidth);
+
+                            return;
+                        }
+
+                        this.carouselHeight = Math.round(slideWidth * image.naturalHeight / image.naturalWidth);
+                    });
                 },
 
                 handleDragStart(event) {
@@ -267,6 +311,8 @@
                     this.prevTranslate = this.currentTranslate;
 
                     this.setSliderPosition();
+
+                    this.updateCarouselHeight();
                 },
 
                 setSliderPosition() {
@@ -298,19 +344,6 @@
                         + currentImage.replace('storage', 'cache/large') + ' 1280w,'
                         + currentImage.replace('storage', 'cache/medium') + ' 1024w, '
                         + currentImage.replace('storage', 'cache/small') + ' 525w';
-                },
-
-                getSlideBackgroundStyle(image) {
-                    if (! this.isMobileView) {
-                        return {};
-                    }
-
-                    const mobileSource = image.mobile_image || image.image;
-                    const overlay = Math.max(0, Math.min(40, Number(this.mobileOverlay || 0))) / 100;
-
-                    return {
-                        backgroundImage: `linear-gradient(rgba(0,0,0,${overlay}), rgba(0,0,0,${overlay})), url('${mobileSource}')`,
-                    };
                 },
 
                 navigate(type) {

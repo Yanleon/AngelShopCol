@@ -45,37 +45,6 @@
                     />
                 </template>
 
-                <input
-                    type="hidden"
-                    name="{{ $currentLocale->code }}[options][mobile_overlay]"
-                    :value="sliders.mobile_overlay"
-                />
-
-                <div class="mt-4 grid gap-2 rounded border border-slate-200 p-3 dark:border-gray-800">
-                    <p class="text-sm font-semibold text-gray-800 dark:text-white">
-                        Ajustes banner movil
-                    </p>
-
-                    <div class="flex flex-wrap items-center gap-2">
-                        <label class="text-xs font-medium text-gray-600 dark:text-gray-300">
-                            Intensidad fondo movil (0-40)
-                        </label>
-
-                        <input
-                            type="number"
-                            min="0"
-                            max="40"
-                            step="1"
-                            v-model.number="sliders.mobile_overlay"
-                            class="w-[96px] rounded border border-slate-300 px-2 py-1 text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-white"
-                        />
-                    </div>
-
-                    <p class="text-xs text-gray-500 dark:text-gray-300">
-                        Recomendado: 10 a 20 para disimular bordes laterales.
-                    </p>
-                </div>
-
                 <div
                     class="grid pt-4"
                     v-if="sliders.images.length"
@@ -313,7 +282,7 @@
                             </p>
 
                             <p class="text-xs text-gray-600 dark:text-gray-300">
-                                Deja logos y textos centrados para evitar cortes en cualquier pantalla.
+                                Usa el mismo formato en todos los banners moviles para mantener estable la altura del carrusel.
                             </p>
                         </x-slot>
 
@@ -362,11 +331,7 @@
                     this.sliders == null 
                     || this.sliders.length == 0
                 ) {
-                    this.sliders = { images: [], mobile_overlay: 15 };
-                }
-
-                if (typeof this.sliders.mobile_overlay === 'undefined' || this.sliders.mobile_overlay === null || this.sliders.mobile_overlay === '') {
-                    this.sliders.mobile_overlay = 15;
+                    this.sliders = { images: [] };
                 }
             },
 
