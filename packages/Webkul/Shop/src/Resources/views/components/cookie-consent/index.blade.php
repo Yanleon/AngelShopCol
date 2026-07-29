@@ -1,6 +1,6 @@
 @props(['stylesOnly' => false])
 
-@if (config('cookie-consent.enabled'))
+@if (cookie_consent()->isEnabled())
     @unless ($stylesOnly)
         @php
             $cookieDecision = cookie_consent()->decision();
@@ -36,29 +36,22 @@
                 display: none !important;
             }
 
-            html.cookie-consent-is-open {
-                overflow: hidden;
-            }
-
             .cookie-consent-layer {
-                align-items: center;
-                background: rgba(17, 24, 39, .42);
-                display: flex;
-                inset: 0;
-                justify-content: center;
-                padding: 20px;
+                bottom: 20px;
+                left: 20px;
+                max-width: 460px;
                 position: fixed;
+                width: calc(100vw - 40px);
                 z-index: 100000;
             }
 
             .cookie-consent-card {
                 background: #fff;
                 border: 1px solid rgba(15, 23, 42, .08);
-                border-radius: 18px;
-                box-shadow: 0 28px 80px rgba(15, 23, 42, .25);
+                border-radius: 16px;
+                box-shadow: 0 18px 50px rgba(15, 23, 42, .2);
                 color: #1f2937;
                 max-height: calc(100vh - 40px);
-                max-width: 680px;
                 overflow-y: auto;
                 position: relative;
                 width: 100%;
@@ -66,26 +59,26 @@
 
             .cookie-consent-header {
                 display: flex;
-                gap: 16px;
-                padding: 26px 28px 18px;
+                gap: 13px;
+                padding: 20px 20px 15px;
             }
 
             .cookie-consent-mark {
                 background: #f3e8ff;
                 border-radius: 50%;
-                flex: 0 0 46px;
-                height: 46px;
+                flex: 0 0 40px;
+                height: 40px;
                 position: relative;
-                width: 46px;
+                width: 40px;
             }
 
             .cookie-consent-mark::before {
                 background: var(--theme-button, #7c3aed);
                 border-radius: 50%;
-                box-shadow: 13px 4px 0 -2px var(--theme-button, #7c3aed), 5px 15px 0 -3px var(--theme-button, #7c3aed);
+                box-shadow: 11px 4px 0 -2px var(--theme-button, #7c3aed), 5px 13px 0 -3px var(--theme-button, #7c3aed);
                 content: '';
                 height: 8px;
-                left: 11px;
+                left: 9px;
                 position: absolute;
                 top: 10px;
                 width: 8px;
@@ -93,7 +86,7 @@
 
             .cookie-consent-title {
                 color: #111827;
-                font-size: 21px;
+                font-size: 19px;
                 font-weight: 700;
                 line-height: 1.25;
                 margin: 0;
@@ -101,9 +94,9 @@
 
             .cookie-consent-copy {
                 color: #596273;
-                font-size: 14px;
-                line-height: 1.65;
-                margin: 8px 0 0;
+                font-size: 13px;
+                line-height: 1.55;
+                margin: 6px 0 0;
             }
 
             .cookie-consent-close {
@@ -118,17 +111,17 @@
                 justify-content: center;
                 line-height: 1;
                 position: absolute;
-                right: 12px;
-                top: 10px;
+                right: 8px;
+                top: 7px;
                 width: 40px;
             }
 
             .cookie-consent-actions {
                 border-top: 1px solid #e5e7eb;
                 display: grid;
-                gap: 10px;
+                gap: 8px;
                 grid-template-columns: 1fr 1fr;
-                padding: 18px 28px 12px;
+                padding: 14px 20px 10px;
             }
 
             .cookie-consent-action {
@@ -140,8 +133,8 @@
                 font-size: 14px;
                 font-weight: 700;
                 justify-content: center;
-                min-height: 48px;
-                padding: 10px 16px;
+                min-height: 44px;
+                padding: 9px 12px;
                 transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease;
             }
 
@@ -179,9 +172,9 @@
                 background: #f8fafc;
                 display: flex;
                 flex-wrap: wrap;
-                gap: 12px 24px;
+                gap: 10px 20px;
                 justify-content: center;
-                padding: 12px 24px 14px;
+                padding: 10px 20px 12px;
             }
 
             .cookie-consent-footer a {
@@ -196,7 +189,7 @@
             }
 
             .cookie-consent-settings {
-                padding: 24px 28px 8px;
+                padding: 20px 20px 6px;
             }
 
             .cookie-consent-settings__back {
@@ -235,7 +228,7 @@
                 font-size: 13px;
                 line-height: 1.55;
                 margin: 5px 0 0;
-                max-width: 470px;
+                max-width: 330px;
             }
 
             .cookie-consent-toggle {
@@ -293,7 +286,7 @@
             }
 
             .cookie-consent-settings__save {
-                padding: 4px 28px 22px;
+                padding: 4px 20px 18px;
             }
 
             .cookie-consent-settings__save .cookie-consent-action {
@@ -303,7 +296,7 @@
             .cookie-consent-error {
                 color: #b91c1c;
                 font-size: 13px;
-                margin: 0 28px 14px;
+                margin: 0 20px 12px;
                 text-align: center;
             }
 
@@ -345,15 +338,14 @@
 
             @media (max-width: 640px) {
                 .cookie-consent-layer {
-                    align-items: flex-end;
-                    padding: 0;
+                    bottom: 12px;
+                    left: 12px;
+                    max-width: none;
+                    width: calc(100vw - 24px);
                 }
 
                 .cookie-consent-card {
-                    border-bottom-left-radius: 0;
-                    border-bottom-right-radius: 0;
-                    max-height: 92vh;
-                    max-width: none;
+                    max-height: calc(100vh - 24px);
                 }
 
                 .cookie-consent-header {
@@ -412,11 +404,12 @@
                     role="presentation"
                 >
                     <section
-                        ref="dialog"
                         class="cookie-consent-card"
                         role="dialog"
-                        aria-modal="true"
+                        aria-live="polite"
+                        aria-atomic="true"
                         :aria-labelledby="showSettings ? 'cookie-settings-title' : 'cookie-consent-title'"
+                        @keydown.esc.stop="close"
                     >
                         <button
                             type="button"
@@ -627,23 +620,9 @@
                 },
 
                 mounted() {
-                    document.addEventListener('keydown', this.handleKeydown);
-                    this.setModalState(this.isOpen);
-
                     if (! this.hasDecision && navigator.globalPrivacyControl === true) {
                         this.rejectAll();
-
-                        return;
                     }
-
-                    if (this.isOpen) {
-                        this.$nextTick(() => this.$refs.acceptButton?.focus());
-                    }
-                },
-
-                beforeUnmount() {
-                    this.setModalState(false);
-                    document.removeEventListener('keydown', this.handleKeydown);
                 },
 
                 methods: {
@@ -652,13 +631,11 @@
                         this.showSettings = false;
                         this.errorMessage = '';
                         this.isOpen = true;
-                        this.setModalState(true);
                         this.$nextTick(() => this.$refs.acceptButton?.focus());
                     },
 
                     close() {
                         this.isOpen = false;
-                        this.setModalState(false);
                         this.$nextTick(() => {
                             const focusTarget = this.$refs.reopenButton || this.lastFocusedElement;
 
@@ -687,63 +664,6 @@
 
                     saveCustom() {
                         this.persist('custom', this.preferences);
-                    },
-
-                    handleKeydown(event) {
-                        if (event.key === 'Escape' && this.isOpen) {
-                            this.close();
-
-                            return;
-                        }
-
-                        if (event.key !== 'Tab' || ! this.isOpen) {
-                            return;
-                        }
-
-                        const focusableElements = this.getFocusableElements();
-
-                        if (! focusableElements.length) {
-                            event.preventDefault();
-
-                            return;
-                        }
-
-                        const firstElement = focusableElements[0];
-                        const lastElement = focusableElements[focusableElements.length - 1];
-
-                        if (event.shiftKey && document.activeElement === firstElement) {
-                            event.preventDefault();
-                            lastElement.focus();
-                        } else if (! event.shiftKey && document.activeElement === lastElement) {
-                            event.preventDefault();
-                            firstElement.focus();
-                        }
-                    },
-
-                    getFocusableElements() {
-                        if (! this.$refs.dialog) {
-                            return [];
-                        }
-
-                        return Array.from(this.$refs.dialog.querySelectorAll(
-                            'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
-                        )).filter(element => element.offsetParent !== null);
-                    },
-
-                    setModalState(isOpen) {
-                        document.documentElement.classList.toggle('cookie-consent-is-open', isOpen);
-
-                        const appRoot = document.getElementById('app');
-
-                        if (! appRoot) {
-                            return;
-                        }
-
-                        Array.from(appRoot.children).forEach(element => {
-                            if (element !== this.$el) {
-                                element.inert = isOpen;
-                            }
-                        });
                     },
 
                     clearMarketingState() {

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Bus;
 use Webkul\Core\Jobs\UpdateCreateVisitIndex;
+use Webkul\Core\Models\CoreConfig;
 use Webkul\Faker\Helpers\Product as ProductFaker;
 use Webkul\Sales\Models\Order;
 
@@ -15,6 +16,11 @@ beforeEach(function () {
         'services.facebook.pixel_id'       => 'test-pixel-id',
         'responsecache.enabled'            => false,
     ]);
+
+    CoreConfig::factory()->create([
+        'code'  => 'general.content.cookie_consent.enabled',
+        'value' => 1,
+    ]);
 });
 
 it('blocks optional tracking and displays the consent dialog before a decision', function () {
@@ -26,8 +32,11 @@ it('blocks optional tracking and displays the consent dialog before a decision',
         ->assertSeeText(trans('shop::app.cookie-consent.accept-all'))
         ->assertSeeText(trans('shop::app.cookie-consent.reject-all'))
         ->assertSee('.cookie-consent-layer {', false)
+        ->assertSee('bottom: 20px;', false)
         ->assertSee(':initially-open="true"', false)
         ->assertSee('window.location.reload()', false)
+        ->assertDontSee('aria-modal="true"', false)
+        ->assertDontSee('cookie-consent-is-open', false)
         ->assertDontSee('connect.facebook.net/en_US/fbevents.js', false)
         ->assertDontSee("fbq('track', 'PageView')", false);
 
@@ -60,6 +69,42 @@ it('stores an encrypted HttpOnly rejection cookie and keeps tracking blocked', f
         ->assertSeeText(trans('shop::app.cookie-consent.reopen'));
 
     Bus::assertNotDispatched(UpdateCreateVisitIndex::class);
+});
+
+it('can be disabled per channel from the admin configuration', function () {
+    $field = system_config()->getConfigField('general.content.cookie_consent.enabled');
+
+    expect($field)
+        ->toMatchArray([
+            'type'          => 'boolean',
+            'channel_based' => true,
+        ]);
+
+    CoreConfig::query()
+        ->where('code', 'general.content.cookie_consent.enabled')
+        ->update(['value' => 0]);
+
+    get(route('shop.home.index'))
+        ->assertOk()
+        ->assertDontSeeText(trans('shop::app.cookie-consent.title'))
+        ->assertSee('connect.facebook.net/en_US/fbevents.js', false);
+
+    postJson(route('shop.cookie_consent.store'), [
+        'action' => 'reject_all',
+    ])->assertNotFound();
+});
+
+it('does not allow a query parameter to select another channel policy', function () {
+    CoreConfig::factory()->create([
+        'code'         => 'general.content.cookie_consent.enabled',
+        'value'        => 0,
+        'channel_code' => 'spoofed-channel',
+    ]);
+
+    get(route('shop.home.index', ['channel' => 'spoofed-channel']))
+        ->assertOk()
+        ->assertSeeText(trans('shop::app.cookie-consent.title'))
+        ->assertDontSee('connect.facebook.net/en_US/fbevents.js', false);
 });
 
 it('loads analytics and marketing only after accepting all cookies', function () {

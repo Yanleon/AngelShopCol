@@ -15,11 +15,26 @@ class CookieConsent
     ];
 
     /**
+     * Determine whether consent management is enabled for the current channel.
+     */
+    public function isEnabled(): bool
+    {
+        $configuredValue = core()->getConfigData(
+            'general.content.cookie_consent.enabled',
+            core()->getCurrentChannelCode()
+        );
+
+        return $configuredValue === null
+            ? (bool) config('cookie-consent.enabled', true)
+            : (bool) $configuredValue;
+    }
+
+    /**
      * Return the current valid consent decision.
      */
     public function decision(?Request $request = null): ?array
     {
-        if (! config('cookie-consent.enabled')) {
+        if (! $this->isEnabled()) {
             return [
                 'necessary'   => true,
                 'analytics'   => true,
@@ -105,7 +120,7 @@ class CookieConsent
      */
     public function cacheKey(?Request $request = null): string
     {
-        if (! config('cookie-consent.enabled')) {
+        if (! $this->isEnabled()) {
             return 'consent-disabled';
         }
 

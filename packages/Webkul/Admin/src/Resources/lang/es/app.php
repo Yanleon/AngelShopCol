@@ -3502,6 +3502,12 @@ return [
                         'title'             => 'Scripts Personalizados',
                         'title-info'        => 'Los scripts personalizados son piezas de código personalizadas creadas para agregar funciones o características específicas al software, mejorando sus capacidades de manera única.',
                     ],
+
+                    'cookie-consent' => [
+                        'enabled'    => 'Activar consentimiento de cookies',
+                        'title'      => 'Consentimiento de cookies',
+                        'title-info' => 'Activa o desactiva el aviso de cookies y el control de las categorías opcionales.',
+                    ],
                 ],
 
                 'design' => [

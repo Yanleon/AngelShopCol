@@ -3476,6 +3476,12 @@ return [
                         'title'             => 'Custom Scripts',
                         'title-info'        => 'Custom scripts are personalized pieces of code created to add specific functions or features to software, enhancing its capabilities uniquely.',
                     ],
+
+                    'cookie-consent' => [
+                        'enabled'    => 'Enable cookie consent',
+                        'title'      => 'Cookie Consent',
+                        'title-info' => 'Enable or disable the cookie notice and optional-category controls.',
+                    ],
                 ],
 
                 'design' => [

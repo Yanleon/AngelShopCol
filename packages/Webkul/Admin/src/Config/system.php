@@ -128,6 +128,20 @@ return [
             ],
         ],
     ], [
+        'key'    => 'general.content.cookie_consent',
+        'name'   => 'admin::app.configuration.index.general.content.cookie-consent.title',
+        'info'   => 'admin::app.configuration.index.general.content.cookie-consent.title-info',
+        'sort'   => 3,
+        'fields' => [
+            [
+                'name'          => 'enabled',
+                'title'         => 'admin::app.configuration.index.general.content.cookie-consent.enabled',
+                'type'          => 'boolean',
+                'default'       => config('cookie-consent.enabled', true),
+                'channel_based' => true,
+            ],
+        ],
+    ], [
         'key'  => 'general.design',
         'name' => 'admin::app.configuration.index.general.design.title',
         'info' => 'admin::app.configuration.index.general.design.info',

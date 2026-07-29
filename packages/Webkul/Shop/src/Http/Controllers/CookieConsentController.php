@@ -14,7 +14,7 @@ class CookieConsentController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        abort_unless(config('cookie-consent.enabled'), 404);
+        abort_unless(cookie_consent()->isEnabled(), 404);
 
         $validated = $request->validate([
             'action' => ['required', Rule::in(['accept_all', 'reject_all', 'custom'])],

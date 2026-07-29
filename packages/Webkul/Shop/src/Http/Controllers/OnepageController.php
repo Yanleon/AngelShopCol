@@ -81,7 +81,7 @@ class OnepageController extends Controller
         $trackFacebookPixelPurchase = config('services.facebook.pixel_id')
             && cookie_consent()->allows('marketing');
 
-        if (config('cookie-consent.enabled')) {
+        if (cookie_consent()->isEnabled()) {
             $purchaseSessionKey = 'cookie_consent.facebook_purchase.'.$order->id;
 
             session()->put('cookie_consent.checkout_order_id', $order->id);
@@ -113,7 +113,7 @@ class OnepageController extends Controller
 
                 $order->checkout_message = $response;
 
-                if (config('cookie-consent.enabled')) {
+                if (cookie_consent()->isEnabled()) {
                     session()->put($checkoutMessageSessionKey, $response);
                 }
             } catch (\Exception $e) {
