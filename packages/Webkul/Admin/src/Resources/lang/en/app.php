@@ -2867,6 +2867,36 @@ return [
             ],
         ],
 
+        'description-templates' => [
+            'index' => [
+                'delete-warning' => 'Are you sure you want to delete this template?',
+                'title'          => 'Description Templates',
+
+                'datagrid' => [
+                    'delete' => 'Delete',
+                    'edit'   => 'Edit',
+                    'id'     => 'ID',
+                    'name'   => 'Name',
+                ],
+
+                'create' => [
+                    'content'  => 'HTML Content',
+                    'name'     => 'Name',
+                    'save-btn' => 'Save Template',
+                    'title'    => 'Create Template',
+                ],
+
+                'edit' => [
+                    'title' => 'Edit Template',
+                ],
+
+                'create-success' => 'Template created successfully.',
+                'delete-failed'  => 'Template deletion failed.',
+                'delete-success' => 'Template deleted successfully.',
+                'update-success' => 'Template updated successfully.',
+            ],
+        ],
+
         'channels' => [
             'index' => [
                 'create-btn'        => 'Create Channel',
@@ -4206,6 +4236,7 @@ return [
                 'customers'                => 'Customers',
                 'dashboard'                => 'Dashboard',
                 'data-transfer'            => 'Data Transfer',
+                'description-templates'    => 'Description Templates',
                 'discount'                 => 'Discount',
                 'email-templates'          => 'Email Templates',
                 'events'                   => 'Events',
@@ -4396,6 +4427,10 @@ return [
         'tinymce' => [
             'ai-btn-tile' => 'Magic AI',
 
+            'templates-btn-title'  => 'Insert Template',
+            'templates-modal-title' => 'Description Templates',
+            'templates-empty'      => 'No templates available. Create one in Settings > Description Templates.',
+
             'ai-generation' => [
                 'apply'                  => 'Apply',
                 'generate'               => 'Generate',
@@ -4442,6 +4477,7 @@ return [
         'dashboard'                => 'Dashboard',
         'data-transfer'            => 'Data Transfer',
         'delete'                   => 'Delete',
+        'description-templates'    => 'Description Templates',
         'edit'                     => 'Edit',
         'email-templates'          => 'Email Templates',
         'events'                   => 'Events',

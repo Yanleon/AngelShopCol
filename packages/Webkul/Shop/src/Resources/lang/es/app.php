@@ -625,6 +625,8 @@ return [
             'review'                 => 'Reseñas',
             'tax-inclusive'          => 'Incluye todos los impuestos',
             'up-sell-title'          => 'Hemos encontrado otros productos que podrían gustarte.',
+            'whatsapp-buy-btn'       => 'Comprar por WhatsApp',
+            'whatsapp-default-message' => 'Hola, quiero comprar ":product", lo vi en la página web y quiero recibir una asesoría',
         ],
 
         'type' => [

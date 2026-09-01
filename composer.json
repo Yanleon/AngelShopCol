@@ -97,6 +97,7 @@
             "Webkul\\Epayco\\": "packages/Webkul/Epayco/src",
             "Webkul\\BoldPayment\\": "packages/Webkul/BoldPayment/src",
             "Webkul\\Bold\\": "packages/Webkul/Bold/src",
+            "Webkul\\DescriptionTemplate\\": "packages/Webkul/DescriptionTemplate/src",
             "Contact\\": "packages/Contact/src"
 
             

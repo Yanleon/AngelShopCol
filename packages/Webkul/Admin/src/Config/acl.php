@@ -850,6 +850,26 @@ return [
         'name'  => 'admin::app.acl.import',
         'route' => 'admin.settings.data_transfer.imports.import',
         'sort'  => 4,
+    ], [
+        'key'   => 'settings.description_templates',
+        'name'  => 'admin::app.acl.description-templates',
+        'route' => 'admin.settings.description_templates.index',
+        'sort'  => 11,
+    ], [
+        'key'   => 'settings.description_templates.create',
+        'name'  => 'admin::app.acl.create',
+        'route' => 'admin.settings.description_templates.store',
+        'sort'  => 1,
+    ], [
+        'key'   => 'settings.description_templates.edit',
+        'name'  => 'admin::app.acl.edit',
+        'route' => 'admin.settings.description_templates.edit',
+        'sort'  => 2,
+    ], [
+        'key'   => 'settings.description_templates.delete',
+        'name'  => 'admin::app.acl.delete',
+        'route' => 'admin.settings.description_templates.delete',
+        'sort'  => 3,
     ],
 
     /*

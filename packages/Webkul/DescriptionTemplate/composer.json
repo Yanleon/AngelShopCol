@@ -1,0 +1,10 @@
+{
+    "name": "webkul/description-template",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Webkul\\DescriptionTemplate\\": "src/"
+        }
+    }
+}

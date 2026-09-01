@@ -342,6 +342,12 @@ return [
         'route'      => 'admin.settings.data_transfer.imports.index',
         'sort'       => 1,
         'icon'       => '',
+    ], [
+        'key'        => 'settings.description_templates',
+        'name'       => 'admin::app.components.layouts.sidebar.description-templates',
+        'route'      => 'admin.settings.description_templates.index',
+        'sort'       => 11,
+        'icon'       => '',
     ],
 
     /**

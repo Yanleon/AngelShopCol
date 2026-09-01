@@ -174,6 +174,47 @@
                     </x-slot>
                 </x-admin::modal>
             </form>
+
+            <!-- Description Templates Modal -->
+            <x-admin::modal ref="templatesModal">
+                <!-- Modal Header -->
+                <x-slot:header>
+                    <p class="flex items-center gap-2.5 text-lg font-bold text-gray-800 dark:text-white">
+                        @lang('admin::app.components.tinymce.templates-modal-title')
+                    </p>
+                </x-slot>
+
+                <!-- Modal Content -->
+                <x-slot:content>
+                    <div
+                        v-if="! templates.length"
+                        class="text-sm text-gray-500 dark:text-gray-300"
+                    >
+                        @lang('admin::app.components.tinymce.templates-empty')
+                    </div>
+
+                    <div
+                        v-else
+                        class="grid gap-3"
+                    >
+                        <div
+                            v-for="template in templates"
+                            :key="template.id"
+                            class="cursor-pointer rounded-md border p-3 transition-all hover:border-blue-600 dark:border-gray-800"
+                            @click="applyTemplate(template)"
+                        >
+                            <p class="mb-2 text-sm font-semibold text-gray-800 dark:text-white">
+                                @{{ template.name }}
+                            </p>
+
+                            <div
+                                class="pointer-events-none max-h-24 overflow-hidden rounded border bg-gray-50 p-2 text-xs dark:border-gray-800 dark:bg-gray-950"
+                                v-html="template.content"
+                            ></div>
+                        </div>
+                    </div>
+                </x-slot>
+            </x-admin::modal>
         </x-admin::form>
     </script>
 
@@ -200,11 +241,18 @@
 
                         content: null,
                     },
+
+                    templates: [],
                 };
             },
 
             mounted() {
                 this.init();
+
+                this.$axios.get("{{ route('admin.settings.description_templates.all') }}")
+                    .then(response => {
+                        this.templates = response.data;
+                    });
 
                 this.$emitter.on('change-theme', (theme) => {
                     tinymce.activeEditor.destroy();
@@ -330,7 +378,7 @@
                     tinyMCEHelper.initTinyMCE({
                         selector: this.selector,
                         plugins: 'image media wordcount save fullscreen code table lists link',
-                        toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor image alignleft aligncenter alignright alignjustify | link hr |numlist bullist outdent indent  | removeformat | code | table | aibutton',
+                        toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor image alignleft aligncenter alignright alignjustify | link hr |numlist bullist outdent indent  | removeformat | code | table | aibutton | templatebutton',
                         image_advtab: true,
                         directionality : "{{ core()->getCurrentLocale()->direction }}",
 
@@ -350,6 +398,17 @@
                                     };
 
                                     self.$refs.magicAIModal.toggle()
+                                }
+                            });
+
+                            editor.ui.registry.addIcon('templates', '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><rect x="4" y="4" width="16" height="16" rx="2" /><line x1="4" y1="10" x2="20" y2="10" /><line x1="10" y1="10" x2="10" y2="20" /></svg>');
+
+                            editor.ui.registry.addButton('templatebutton', {
+                                text: "@lang('admin::app.components.tinymce.templates-btn-title')",
+                                icon: 'templates',
+
+                                onAction: function () {
+                                    self.$refs.templatesModal.toggle();
                                 }
                             });
 
@@ -393,6 +452,16 @@
                     this.field.onInput(this.ai.content.replace(/\r?\n/g, '<br />'));
 
                     this.$refs.magicAIModal.close();
+                },
+
+                applyTemplate(template) {
+                    let editorInstance = tinymce.get(this.selector.replace('textarea#', ''));
+
+                    editorInstance.insertContent(template.content);
+
+                    this.field.onInput(editorInstance.getContent());
+
+                    this.$refs.templatesModal.close();
                 },
             },
         })

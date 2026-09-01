@@ -380,6 +380,27 @@
 
                                 {!! view_render_event('bagisto.shop.products.short_description.after', ['product' => $product]) !!}
 
+                                @if ($product->show_whatsapp_button)
+                                    @php
+                                        $whatsappMessage = $product->whatsapp_message
+                                            ?: trans('shop::app.products.view.whatsapp-default-message', ['product' => $product->name]);
+                                    @endphp
+
+                                    <a
+                                        href="https://api.whatsapp.com/send?phone={{ core()->getConfigData('general.general.whatsapp.number') }}&text={{ $whatsappMessage }}"
+                                        target="_blank"
+                                        class="mt-4 inline-flex items-center gap-2.5 rounded-full bg-green-600 px-6 py-3 text-white transition-all hover:scale-95"
+                                    >
+                                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9"></path>
+                                            <path d="M9 10a.5 .5 0 0 0 1 0v-1a.5 .5 0 0 0 -1 0v1a5 5 0 0 0 5 5h1a.5 .5 0 0 0 0 -1h-1a.5 .5 0 0 0 0 1"></path>
+                                        </svg>
+
+                                        @lang('shop::app.products.view.whatsapp-buy-btn')
+                                    </a>
+                                @endif
+
                                 @include('shop::products.view.types.configurable')
 
                                 @include('shop::products.view.types.grouped')

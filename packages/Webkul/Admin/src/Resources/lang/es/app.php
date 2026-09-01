@@ -2893,6 +2893,36 @@ return [
             ],
         ],
 
+        'description-templates' => [
+            'index' => [
+                'delete-warning' => '¿Está seguro de que desea eliminar esta plantilla?',
+                'title'          => 'Plantillas de Descripción',
+
+                'datagrid' => [
+                    'delete' => 'Eliminar',
+                    'edit'   => 'Editar',
+                    'id'     => 'ID',
+                    'name'   => 'Nombre',
+                ],
+
+                'create' => [
+                    'content'  => 'Contenido HTML',
+                    'name'     => 'Nombre',
+                    'save-btn' => 'Guardar Plantilla',
+                    'title'    => 'Crear Plantilla',
+                ],
+
+                'edit' => [
+                    'title' => 'Editar Plantilla',
+                ],
+
+                'create-success' => 'Plantilla creada exitosamente.',
+                'delete-failed'  => 'Error al eliminar la plantilla.',
+                'delete-success' => 'Plantilla eliminada exitosamente.',
+                'update-success' => 'Plantilla actualizada exitosamente.',
+            ],
+        ],
+
         'channels' => [
             'index' => [
                 'create-btn'        => 'Crear Canal',
@@ -4232,6 +4262,7 @@ return [
                 'customers'                => 'Clientes',
                 'dashboard'                => 'Panel de Control',
                 'data-transfer'            => 'Transferencia de datos',
+                'description-templates'    => 'Plantillas de Descripción',
                 'discount'                 => 'Descuento',
                 'email-templates'          => 'Plantillas de Correo Electrónico',
                 'events'                   => 'Eventos',
@@ -4422,6 +4453,10 @@ return [
         'tinymce' => [
             'ai-btn-tile' => 'Magia IA',
 
+            'templates-btn-title'   => 'Insertar Plantilla',
+            'templates-modal-title' => 'Plantillas de Descripción',
+            'templates-empty'       => 'No hay plantillas disponibles. Cree una en Configuración > Plantillas de Descripción.',
+
             'ai-generation' => [
                 'apply'                  => 'Aplicar',
                 'generate'               => 'Generar',
@@ -4468,6 +4503,7 @@ return [
         'dashboard'                => 'Tablero',
         'data-transfer'            => 'Transferencia de datos',
         'delete'                   => 'Eliminar',
+        'description-templates'    => 'Plantillas de Descripción',
         'edit'                     => 'Editar',
         'email-templates'          => 'Plantillas de Correo Electrónico',
         'events'                   => 'Eventos',
