@@ -127,7 +127,7 @@
         >
             <div
                 id="promo-popup-frame-overlay"
-                style="position:absolute; inset:0; background: transparent; opacity:0; transition: opacity .25s ease;"
+                style="position:absolute; inset:0; background: transparent; opacity:0; pointer-events:none; transition: opacity .25s ease;"
                 onclick="var r=document.getElementById('promo-popup-frame-root'); if(r && r.__close) r.__close();"
             ></div>
 
@@ -138,7 +138,7 @@
                     aria-modal="true"
                     aria-label="{{ trans('shop::app.components.layouts.popup-widget.dialog-label') }}"
                     tabindex="-1"
-                    style="position:relative; width:100%; max-width:760px; opacity:0; transform:translateY(16px) scale(.97); transition: opacity .25s ease, transform .25s ease; outline:none;"
+                    style="position:relative; width:100%; max-width:760px; opacity:0; pointer-events:none; transform:translateY(16px) scale(.97); transition: opacity .25s ease, transform .25s ease; outline:none;"
                 >
                     <button
                         type="button"
@@ -164,7 +164,7 @@
         <div id="promo-popup-simple-root" style="display:none; position:fixed; inset:0; z-index:99999;">
             <div
                 id="promo-popup-simple-overlay"
-                style="position:absolute; inset:0; background:rgba(0,0,0,.55); opacity:0; transition: opacity .25s ease;"
+                style="position:absolute; inset:0; background:rgba(0,0,0,.55); opacity:0; pointer-events:none; transition: opacity .25s ease;"
                 onclick="var r=document.getElementById('promo-popup-simple-root'); if(r && r.__close) r.__close();"
             ></div>
 
@@ -175,7 +175,7 @@
                     aria-modal="true"
                     aria-label="{{ trans('shop::app.components.layouts.popup-widget.dialog-label') }}"
                     tabindex="-1"
-                    style="position:relative; width:100%; max-width:760px; background:#fff; border-radius:16px; padding:16px; opacity:0; transform:translateY(16px) scale(.97); transition: opacity .25s ease, transform .25s ease; outline:none;"
+                    style="position:relative; width:100%; max-width:760px; background:#fff; border-radius:16px; padding:16px; opacity:0; pointer-events:none; transform:translateY(16px) scale(.97); transition: opacity .25s ease, transform .25s ease; outline:none;"
                 >
                     <button
                         type="button"
@@ -406,6 +406,12 @@
                     };
 
                     const animateIn = (overlay, box) => {
+                        // Only intercept clicks once the popup is actually visible,
+                        // so a failure before this point never leaves an invisible
+                        // element blocking the whole page.
+                        if (overlay) overlay.style.pointerEvents = 'auto';
+                        if (box) box.style.pointerEvents = 'auto';
+
                         requestAnimationFrame(() => {
                             requestAnimationFrame(() => {
                                 if (overlay) overlay.style.opacity = '1';
@@ -420,17 +426,31 @@
                     };
 
                     const animateOut = (overlay, box, onDone) => {
-                        if (overlay) overlay.style.opacity = '0';
+                        if (overlay) {
+                            overlay.style.opacity = '0';
+                            overlay.style.pointerEvents = 'none';
+                        }
 
                         if (box) {
                             box.style.opacity = '0';
+                            box.style.pointerEvents = 'none';
                             box.style.transform = 'translateY(16px) scale(.97)';
                         }
 
                         setTimeout(onDone, ANIMATION_MS);
                     };
 
+                    // Fail-safe: if anything below throws, never leave an
+                    // invisible overlay blocking clicks on the rest of the page.
+                    const failSafeClose = () => {
+                        ['promo-popup-frame-root', 'promo-popup-simple-root'].forEach((id) => {
+                            const el = document.getElementById(id);
+                            if (el) el.style.display = 'none';
+                        });
+                    };
+
                     window.addEventListener('load', function () {
+                      try {
                         if (isHtmlMode) {
                             const root = document.getElementById('promo-popup-frame-root');
                             const box = document.getElementById('promo-popup-frame-box');
@@ -564,6 +584,9 @@
                         if (Number.isFinite(autoCloseSeconds) && autoCloseSeconds > 0) {
                             setTimeout(closeSimple, autoCloseSeconds * 1000);
                         }
+                      } catch (e) {
+                          failSafeClose();
+                      }
                     });
                 } catch (e) {
                     // If localStorage is blocked, just show it.
