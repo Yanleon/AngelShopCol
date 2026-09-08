@@ -406,23 +406,35 @@
                     };
 
                     const animateIn = (overlay, box) => {
+                        let revealed = false;
+
+                        const reveal = () => {
+                            if (revealed) return;
+                            revealed = true;
+
+                            if (overlay) overlay.style.opacity = '1';
+
+                            if (box) {
+                                box.style.opacity = '1';
+                                box.style.transform = 'translateY(0) scale(1)';
+                                box.focus();
+                            }
+                        };
+
                         // Only intercept clicks once the popup is actually visible,
                         // so a failure before this point never leaves an invisible
                         // element blocking the whole page.
                         if (overlay) overlay.style.pointerEvents = 'auto';
                         if (box) box.style.pointerEvents = 'auto';
 
-                        requestAnimationFrame(() => {
-                            requestAnimationFrame(() => {
-                                if (overlay) overlay.style.opacity = '1';
+                        // requestAnimationFrame gives the smoothest transition, but
+                        // some environments (throttled/background tabs, certain
+                        // devtools/device-emulation states) can delay or skip it
+                        // entirely. A timeout fallback guarantees the popup always
+                        // ends up visible instead of staying stuck invisible.
+                        requestAnimationFrame(() => requestAnimationFrame(reveal));
 
-                                if (box) {
-                                    box.style.opacity = '1';
-                                    box.style.transform = 'translateY(0) scale(1)';
-                                    box.focus();
-                                }
-                            });
-                        });
+                        setTimeout(reveal, 150);
                     };
 
                     const animateOut = (overlay, box, onDone) => {
