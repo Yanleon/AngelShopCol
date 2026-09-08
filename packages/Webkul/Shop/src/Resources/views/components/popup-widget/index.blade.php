@@ -127,25 +127,32 @@
         >
             <div
                 id="promo-popup-frame-overlay"
-                style="position:absolute; inset:0; background: transparent;"
-                onclick="var r=document.getElementById('promo-popup-frame-root'); if(r) r.style.display='none'; var f=document.getElementById('promo-popup-frame'); if(f) f.srcdoc='<!doctype html><html><body></body></html>';"
+                style="position:absolute; inset:0; background: transparent; opacity:0; transition: opacity .25s ease;"
+                onclick="var r=document.getElementById('promo-popup-frame-root'); if(r && r.__close) r.__close();"
             ></div>
 
             <div style="position:relative; z-index:1; min-height:100%; display:flex; align-items:center; justify-content:center; padding:16px;">
-                <div style="position:relative; width:100%; max-width:760px;">
+                <div
+                    id="promo-popup-frame-box"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="{{ trans('shop::app.components.layouts.popup-widget.dialog-label') }}"
+                    tabindex="-1"
+                    style="position:relative; width:100%; max-width:760px; opacity:0; transform:translateY(16px) scale(.97); transition: opacity .25s ease, transform .25s ease; outline:none;"
+                >
                     <button
                         type="button"
                         id="promo-popup-frame-close"
                         style="position:absolute; right:10px; top:10px; z-index:2; font-size:28px; line-height:1; background:rgba(0,0,0,.25); border:0; color:#fff; border-radius:999px; width:44px; height:44px; cursor:pointer;"
-                        aria-label="Close popup"
-                        onclick="var r=document.getElementById('promo-popup-frame-root'); if(r) r.style.display='none'; var f=document.getElementById('promo-popup-frame'); if(f) f.srcdoc='<!doctype html><html><body></body></html>';"
+                        aria-label="{{ trans('shop::app.components.layouts.popup-widget.close') }}"
+                        onclick="var r=document.getElementById('promo-popup-frame-root'); if(r && r.__close) r.__close();"
                     >
                         ×
                     </button>
 
                     <iframe
                         id="promo-popup-frame"
-                        title="Promotion Popup"
+                        title="{{ trans('shop::app.components.layouts.popup-widget.dialog-label') }}"
                         style="display:block; width:100%; height:80vh; max-height:720px; border:0; border-radius:0; background:transparent; position:relative; z-index:0;"
                         sandbox="allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox"
                         data-srcdoc-b64="{{ $popupSrcdocB64 }}"
@@ -157,18 +164,25 @@
         <div id="promo-popup-simple-root" style="display:none; position:fixed; inset:0; z-index:99999;">
             <div
                 id="promo-popup-simple-overlay"
-                style="position:absolute; inset:0; background:rgba(0,0,0,.55);"
-                onclick="var r=document.getElementById('promo-popup-simple-root'); if(r) r.style.display='none';"
+                style="position:absolute; inset:0; background:rgba(0,0,0,.55); opacity:0; transition: opacity .25s ease;"
+                onclick="var r=document.getElementById('promo-popup-simple-root'); if(r && r.__close) r.__close();"
             ></div>
 
             <div style="position:relative; z-index:1; min-height:100%; display:flex; align-items:center; justify-content:center; padding:16px;">
-                <div style="position:relative; width:100%; max-width:760px; background:#fff; border-radius:16px; padding:16px;">
+                <div
+                    id="promo-popup-simple-box"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="{{ trans('shop::app.components.layouts.popup-widget.dialog-label') }}"
+                    tabindex="-1"
+                    style="position:relative; width:100%; max-width:760px; background:#fff; border-radius:16px; padding:16px; opacity:0; transform:translateY(16px) scale(.97); transition: opacity .25s ease, transform .25s ease; outline:none;"
+                >
                     <button
                         type="button"
                         id="promo-popup-simple-close"
                         style="position:absolute; right:10px; top:10px; z-index:2; font-size:28px; line-height:1; background:rgba(0,0,0,.18); border:0; color:#111; border-radius:999px; width:44px; height:44px; cursor:pointer;"
-                        aria-label="Close popup"
-                        onclick="var r=document.getElementById('promo-popup-simple-root'); if(r) r.style.display='none';"
+                        aria-label="{{ trans('shop::app.components.layouts.popup-widget.close') }}"
+                        onclick="var r=document.getElementById('promo-popup-simple-root'); if(r && r.__close) r.__close();"
                     >
                         ×
                     </button>
@@ -362,18 +376,90 @@
                     // Mark as seen immediately to avoid double opens.
                     setSeenAt();
 
+                    const ANIMATION_MS = 250;
+
+                    // Keeps Tab navigation inside the open dialog.
+                    const getFocusable = (box) => {
+                        if (!box) return [];
+
+                        return Array.prototype.slice
+                            .call(box.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'))
+                            .filter((el) => el.offsetParent !== null);
+                    };
+
+                    const trapTab = (e, box) => {
+                        if (e.key !== 'Tab') return;
+
+                        const focusable = getFocusable(box);
+                        if (!focusable.length) return;
+
+                        const first = focusable[0];
+                        const last = focusable[focusable.length - 1];
+
+                        if (e.shiftKey && document.activeElement === first) {
+                            e.preventDefault();
+                            last.focus();
+                        } else if (!e.shiftKey && document.activeElement === last) {
+                            e.preventDefault();
+                            first.focus();
+                        }
+                    };
+
+                    const animateIn = (overlay, box) => {
+                        requestAnimationFrame(() => {
+                            requestAnimationFrame(() => {
+                                if (overlay) overlay.style.opacity = '1';
+
+                                if (box) {
+                                    box.style.opacity = '1';
+                                    box.style.transform = 'translateY(0) scale(1)';
+                                    box.focus();
+                                }
+                            });
+                        });
+                    };
+
+                    const animateOut = (overlay, box, onDone) => {
+                        if (overlay) overlay.style.opacity = '0';
+
+                        if (box) {
+                            box.style.opacity = '0';
+                            box.style.transform = 'translateY(16px) scale(.97)';
+                        }
+
+                        setTimeout(onDone, ANIMATION_MS);
+                    };
+
                     window.addEventListener('load', function () {
                         if (isHtmlMode) {
                             const root = document.getElementById('promo-popup-frame-root');
+                            const box = document.getElementById('promo-popup-frame-box');
+                            const overlay = document.getElementById('promo-popup-frame-overlay');
                             const frame = document.getElementById('promo-popup-frame');
                             const closeBtn = document.getElementById('promo-popup-frame-close');
-                            const overlay = document.getElementById('promo-popup-frame-overlay');
+
                             if (DEBUG_POPUP) console.log('[popup_widget] html mode open', { hasFrame: !!frame, autoCloseSeconds });
+
+                            let lastFocused = null;
+
+                            const onKeydown = (e) => {
+                                if (e.key === 'Escape') close();
+                                trapTab(e, box);
+                            };
+
                             const close = () => {
-                                if (root) root.style.display = 'none';
-                                if (frame) frame.srcdoc = '<!doctype html><html><body></body></html>';
+                                document.removeEventListener('keydown', onKeydown);
+
+                                animateOut(overlay, box, () => {
+                                    if (root) root.style.display = 'none';
+                                    if (frame) frame.srcdoc = '<!doctype html><html><body></body></html>';
+                                    if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+                                });
+
                                 markDismissed();
                             };
+
+                            if (root) root.__close = close;
 
                             if (closeBtn) {
                                 closeBtn.addEventListener('click', close);
@@ -384,6 +470,7 @@
                             }
 
                             if (root) {
+                                lastFocused = document.activeElement;
                                 root.style.display = 'block';
                             }
 
@@ -408,9 +495,9 @@
                                 }
                             }
 
-                            document.addEventListener('keydown', function (e) {
-                                if (e && e.key === 'Escape') close();
-                            }, { once: true });
+                            document.addEventListener('keydown', onKeydown);
+
+                            animateIn(overlay, box);
 
                             if (Number.isFinite(autoCloseSeconds) && autoCloseSeconds > 0) {
                                 setTimeout(close, autoCloseSeconds * 1000);
@@ -420,15 +507,32 @@
                         }
 
                         const simpleRoot = document.getElementById('promo-popup-simple-root');
-                        const simpleClose = document.getElementById('promo-popup-simple-close');
+                        const simpleBox = document.getElementById('promo-popup-simple-box');
                         const simpleOverlay = document.getElementById('promo-popup-simple-overlay');
+                        const simpleClose = document.getElementById('promo-popup-simple-close');
+
+                        let lastFocusedSimple = null;
+
+                        const onKeydownSimple = (e) => {
+                            if (e.key === 'Escape') closeSimple();
+                            trapTab(e, simpleBox);
+                        };
 
                         const closeSimple = () => {
-                            if (simpleRoot) simpleRoot.style.display = 'none';
+                            document.removeEventListener('keydown', onKeydownSimple);
+
+                            animateOut(simpleOverlay, simpleBox, () => {
+                                if (simpleRoot) simpleRoot.style.display = 'none';
+                                if (lastFocusedSimple && typeof lastFocusedSimple.focus === 'function') lastFocusedSimple.focus();
+                            });
+
                             markDismissed();
                         };
 
+                        if (simpleRoot) simpleRoot.__close = closeSimple;
+
                         if (simpleRoot) {
+                            lastFocusedSimple = document.activeElement;
                             simpleRoot.style.display = 'block';
                         }
 
@@ -440,17 +544,6 @@
                             simpleOverlay.addEventListener('click', closeSimple);
                         }
 
-                        // Mark as dismissed when the modal is closed.
-                        document.addEventListener('click', function (e) {
-                            const t = e.target;
-                            if (!t) return;
-
-                            if (t.id === 'promo-popup-simple-close' || t.id === 'promo-popup-simple-overlay') markDismissed();
-                        }, { capture: true });
-
-                        // Bind optional behaviors.
-                        // No-op for simple popup (we control overlay behavior directly).
-
                         const neverEl = document.getElementById('promo-popup-never');
                         if (neverEl) {
                             neverEl.addEventListener('change', function () {
@@ -459,22 +552,17 @@
                                     safeStorageSet(sessionStorage, storageKeyNever, '1');
                                     if (cookieKeyNever) cookieSet(cookieKeyNever, '1', 365);
 
-                                    // Close immediately.
-                                    if (isHtmlMode) {
-                                        const frame = document.getElementById('promo-popup-frame');
-                                        if (frame) frame.style.display = 'none';
-                                    } else {
-                                        closeSimple();
-                                    }
+                                    closeSimple();
                                 }
                             });
                         }
 
+                        document.addEventListener('keydown', onKeydownSimple);
+
+                        animateIn(simpleOverlay, simpleBox);
+
                         if (Number.isFinite(autoCloseSeconds) && autoCloseSeconds > 0) {
-                            setTimeout(function () {
-                                // Auto-close should also count as dismissed.
-                                closeSimple();
-                            }, autoCloseSeconds * 1000);
+                            setTimeout(closeSimple, autoCloseSeconds * 1000);
                         }
                     });
                 } catch (e) {

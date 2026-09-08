@@ -445,7 +445,9 @@ return [
             ],
 
             'popup-widget' => [
-                'dont-show-again' => 'No mostrar de nuevo',
+                'close'            => 'Cerrar ventana emergente',
+                'dont-show-again'  => 'No mostrar de nuevo',
+                'dialog-label'     => 'Promoción',
             ],
         ],
 

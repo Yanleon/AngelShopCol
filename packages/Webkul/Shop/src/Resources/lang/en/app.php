@@ -444,7 +444,9 @@ return [
             ],
 
             'popup-widget' => [
+                'close'           => 'Close popup',
                 'dont-show-again' => "Don't show again",
+                'dialog-label'    => 'Promotion',
             ],
         ],
 
