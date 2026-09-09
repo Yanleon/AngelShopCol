@@ -461,7 +461,12 @@
                         });
                     };
 
-                    window.addEventListener('load', function () {
+                    // Some environments can fire (or have already fired) the
+                    // window 'load' event before this script attaches its
+                    // listener - a listener added after the fact never runs,
+                    // silently doing nothing. Run immediately if we already
+                    // missed it.
+                    const openPopup = function () {
                       try {
                         if (isHtmlMode) {
                             const root = document.getElementById('promo-popup-frame-root');
@@ -600,7 +605,13 @@
                           console.error('[popup_widget] failed to open popup, closing safely:', e);
                           failSafeClose();
                       }
-                    });
+                    };
+
+                    if (document.readyState === 'complete') {
+                        openPopup();
+                    } else {
+                        window.addEventListener('load', openPopup);
+                    }
                 } catch (e) {
                     console.error('[popup_widget] failed before scheduling open:', e);
                 }
