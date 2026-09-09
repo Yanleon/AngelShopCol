@@ -597,11 +597,12 @@
                             setTimeout(closeSimple, autoCloseSeconds * 1000);
                         }
                       } catch (e) {
+                          console.error('[popup_widget] failed to open popup, closing safely:', e);
                           failSafeClose();
                       }
                     });
                 } catch (e) {
-                    // If localStorage is blocked, just show it.
+                    console.error('[popup_widget] failed before scheduling open:', e);
                 }
             })();
         </script>
