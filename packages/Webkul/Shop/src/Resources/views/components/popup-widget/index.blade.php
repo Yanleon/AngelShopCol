@@ -115,10 +115,15 @@
     $popupCss = trim($popupCss."\n".".promo-close{display:none!important;}\n");
 
     // Decorative elements in pasted CSS (e.g. a header shape bleeding past its
-    // box with negative left/right offsets) can widen the page's scrollable
-    // area and trigger a horizontal scrollbar that shifts the whole popup.
-    // Clip it at the html/body level so it never affects layout.
-    $popupCss = trim("html,body{overflow-x:hidden;margin:0;}\n".$popupCss);
+    // box with negative left/right offsets) can widen an element's scrollable
+    // area. Per the CSS overflow spec, any element that sets only
+    // "overflow-y" (e.g. a card using overflow-y:auto for tall content)
+    // automatically gets its overflow-x computed as "auto" too - showing an
+    // unwanted horizontal scrollbar. Setting overflow-x:hidden explicitly on
+    // every element (author CSS with matching specificity still wins for
+    // properties it actually sets) prevents that without touching intended
+    // vertical scrolling.
+    $popupCss = trim("html,body{overflow-x:hidden;margin:0;}\n*,*::before,*::after{overflow-x:hidden;}\n".$popupCss);
 
     $popupSrcdoc = trim((string) ("<!doctype html><html><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><style>\n{$popupCss}\n</style></head><body>".$popupHtml."</body></html>"));
     $popupSrcdocB64 = base64_encode($popupSrcdoc);
