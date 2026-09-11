@@ -116,14 +116,15 @@
 
     // Decorative elements in pasted CSS (e.g. a header shape bleeding past its
     // box with negative left/right offsets) can widen an element's scrollable
-    // area. Per the CSS overflow spec, any element that sets only
-    // "overflow-y" (e.g. a card using overflow-y:auto for tall content)
-    // automatically gets its overflow-x computed as "auto" too - showing an
-    // unwanted horizontal scrollbar. Setting overflow-x:hidden explicitly on
-    // every element (author CSS with matching specificity still wins for
-    // properties it actually sets) prevents that without touching intended
-    // vertical scrolling.
-    $popupCss = trim("html,body{overflow-x:hidden;margin:0;}\n*,*::before,*::after{overflow-x:hidden;}\n".$popupCss);
+    // area. Per the CSS overflow spec, if only one of overflow-x/overflow-y is
+    // set, the other (left at its default "visible") gets computed as "auto"
+    // instead - showing an unwanted scrollbar on that axis. Resetting BOTH
+    // axes to "hidden" here (via the shorthand) avoids that mismatch; any
+    // author rule that explicitly sets one axis (e.g. a card's
+    // "overflow-y:auto" for tall content) still wins for that axis since a
+    // class selector is more specific than "*", without re-triggering the
+    // auto-visible quirk on the other axis.
+    $popupCss = trim("html,body{overflow:hidden;margin:0;}\n*,*::before,*::after{overflow:hidden;}\n".$popupCss);
 
     $popupSrcdoc = trim((string) ("<!doctype html><html><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><style>\n{$popupCss}\n</style></head><body>".$popupHtml."</body></html>"));
     $popupSrcdocB64 = base64_encode($popupSrcdoc);
