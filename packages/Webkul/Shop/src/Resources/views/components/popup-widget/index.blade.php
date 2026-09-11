@@ -144,7 +144,7 @@
             ></div>
 
             <div style="position:relative; z-index:1; min-height:100%; display:flex; align-items:center; justify-content:center; padding:16px;">
-                <div style="position:relative; width:100%; max-width:760px;">
+                <div style="position:relative; width:100%; max-width:480px;">
                     <button
                         type="button"
                         id="promo-popup-frame-close"
