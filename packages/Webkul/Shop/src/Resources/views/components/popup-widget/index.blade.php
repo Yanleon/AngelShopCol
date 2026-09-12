@@ -425,7 +425,12 @@
                             }, { once: true });
 
                             if (Number.isFinite(autoCloseSeconds) && autoCloseSeconds > 0) {
-                                setTimeout(close, autoCloseSeconds * 1000);
+                                console.log('[popup_widget] auto-close programado para dentro de ' + autoCloseSeconds + 's, a las ' + new Date(Date.now() + autoCloseSeconds * 1000).toLocaleTimeString());
+
+                                setTimeout(function () {
+                                    console.log('[popup_widget] auto-close disparado a las ' + new Date().toLocaleTimeString());
+                                    close();
+                                }, autoCloseSeconds * 1000);
                             }
 
                             return;
