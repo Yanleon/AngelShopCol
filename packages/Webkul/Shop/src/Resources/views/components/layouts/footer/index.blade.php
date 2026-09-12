@@ -277,10 +277,10 @@
     {!! view_render_event('bagisto.shop.layout.footer.payment_methods.before') !!}
 
     @php
-        $paymentMethodsTitle = core()->getConfigData('general.payment-methods.title');
-        $paymentMethodsBg = core()->getConfigData('general.payment-methods.background_color');
+        $paymentMethodsTitle = core()->getConfigData('general.payment-methods.banner.title');
+        $paymentMethodsBg = core()->getConfigData('general.payment-methods.banner.background_color');
         $paymentLogos = collect(range(1, 8))
-            ->map(fn ($i) => core()->getConfigData("general.payment-methods.logo_{$i}"))
+            ->map(fn ($i) => core()->getConfigData("general.payment-methods.banner.logo_{$i}"))
             ->filter();
     @endphp
 

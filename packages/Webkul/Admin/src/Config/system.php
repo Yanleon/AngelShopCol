@@ -452,11 +452,17 @@ return [
         'sort' => 5,
     ],
     [
-        'key'    => 'general.payment-methods',
+        'key'  => 'general.payment-methods',
+        'name' => 'admin::app.configuration.index.general.payment-methods.title',
+        'info' => 'admin::app.configuration.index.general.payment-methods.info',
+        'icon' => 'settings/payment-method.svg',
+        'sort' => 6,
+    ],
+    [
+        'key'    => 'general.payment-methods.banner',
         'name'   => 'admin::app.configuration.index.general.payment-methods.title',
         'info'   => 'admin::app.configuration.index.general.payment-methods.info',
-        'icon'   => 'settings/payment-method.svg',
-        'sort'   => 6,
+        'sort'   => 1,
         'fields' => [
             [
                 'name'    => 'title',
