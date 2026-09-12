@@ -382,8 +382,17 @@
                             const overlay = document.getElementById('promo-popup-frame-overlay');
                             if (DEBUG_POPUP) console.log('[popup_widget] html mode open', { hasFrame: !!frame, autoCloseSeconds });
                             const close = () => {
-                                if (root) root.style.display = 'none';
-                                if (frame) frame.srcdoc = '<!doctype html><html><body></body></html>';
+                                // Re-query instead of reusing the closed-over
+                                // references: if the surrounding page (Vue)
+                                // re-renders this region between opening and
+                                // closing, those stale references would keep
+                                // pointing at a detached node while a new,
+                                // still-visible one takes its place.
+                                const currentRoot = document.getElementById('promo-popup-frame-root');
+                                const currentFrame = document.getElementById('promo-popup-frame');
+
+                                if (currentRoot) currentRoot.style.display = 'none';
+                                if (currentFrame) currentFrame.srcdoc = '<!doctype html><html><body></body></html>';
                                 markDismissed();
                             };
 
@@ -425,12 +434,7 @@
                             }, { once: true });
 
                             if (Number.isFinite(autoCloseSeconds) && autoCloseSeconds > 0) {
-                                console.log('[popup_widget] auto-close programado para dentro de ' + autoCloseSeconds + 's, a las ' + new Date(Date.now() + autoCloseSeconds * 1000).toLocaleTimeString());
-
-                                setTimeout(function () {
-                                    console.log('[popup_widget] auto-close disparado a las ' + new Date().toLocaleTimeString());
-                                    close();
-                                }, autoCloseSeconds * 1000);
+                                setTimeout(close, autoCloseSeconds * 1000);
                             }
 
                             return;
@@ -441,7 +445,12 @@
                         const simpleOverlay = document.getElementById('promo-popup-simple-overlay');
 
                         const closeSimple = () => {
-                            if (simpleRoot) simpleRoot.style.display = 'none';
+                            // Re-query for the same reason as the HTML-mode
+                            // close() above: avoid acting on a stale, already
+                            // detached reference if the page re-rendered.
+                            const currentSimpleRoot = document.getElementById('promo-popup-simple-root');
+
+                            if (currentSimpleRoot) currentSimpleRoot.style.display = 'none';
                             markDismissed();
                         };
 
