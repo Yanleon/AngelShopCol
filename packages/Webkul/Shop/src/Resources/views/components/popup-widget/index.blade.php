@@ -158,7 +158,7 @@
                     <iframe
                         id="promo-popup-frame"
                         title="Promotion Popup"
-                        style="display:block; width:100%; height:80vh; max-height:720px; border:0; border-radius:0; background:transparent; position:relative; z-index:0;"
+                        style="display:block; width:100%; height:70vh; max-height:640px; border:0; border-radius:0; background:transparent; position:relative; z-index:0;"
                         sandbox="allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox"
                         data-srcdoc-b64="{{ $popupSrcdocB64 }}"
                     ></iframe>
