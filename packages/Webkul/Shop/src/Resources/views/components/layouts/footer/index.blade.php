@@ -274,6 +274,39 @@
         {!! view_render_event('bagisto.shop.layout.footer.newsletter_subscription.after') !!}
     </div>
 
+    {!! view_render_event('bagisto.shop.layout.footer.payment_methods.before') !!}
+
+    @php
+        $paymentMethodsTitle = core()->getConfigData('general.payment-methods.title');
+        $paymentMethodsBg = core()->getConfigData('general.payment-methods.background_color');
+        $paymentLogos = collect(range(1, 8))
+            ->map(fn ($i) => core()->getConfigData("general.payment-methods.logo_{$i}"))
+            ->filter();
+    @endphp
+
+    @if ($paymentLogos->isNotEmpty())
+        <div
+            class="px-[60px] py-6 max-sm:px-5"
+            @if ($paymentMethodsBg)
+                style="background-color: {{ $paymentMethodsBg }}"
+            @endif
+        >
+            @if ($paymentMethodsTitle)
+                <p class="mb-4 text-center text-sm font-semibold uppercase tracking-wide text-navyBlue">
+                    {{ $paymentMethodsTitle }}
+                </p>
+            @endif
+
+            <div class="mx-auto flex max-w-3xl flex-wrap items-center justify-center gap-x-6 gap-y-3 rounded-full bg-white px-6 py-3 shadow-sm">
+                @foreach ($paymentLogos as $logo)
+                    <img src="{{ Storage::url($logo) }}" alt="" class="h-8 w-auto object-contain" />
+                @endforeach
+            </div>
+        </div>
+    @endif
+
+    {!! view_render_event('bagisto.shop.layout.footer.payment_methods.after') !!}
+
     <div
         class="flex justify-between bg-[#F1EADF] px-[60px] py-3.5 max-md:justify-center max-sm:px-5"
         @if ($footerBottomBg)

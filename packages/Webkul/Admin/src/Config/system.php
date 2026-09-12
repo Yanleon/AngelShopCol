@@ -452,6 +452,66 @@ return [
         'sort' => 5,
     ],
     [
+        'key'    => 'general.payment-methods',
+        'name'   => 'admin::app.configuration.index.general.payment-methods.title',
+        'info'   => 'admin::app.configuration.index.general.payment-methods.info',
+        'icon'   => 'settings/payment-method.svg',
+        'sort'   => 6,
+        'fields' => [
+            [
+                'name'    => 'title',
+                'title'   => 'admin::app.configuration.index.general.payment-methods.section-title',
+                'type'    => 'text',
+                'default' => 'Medios de Pago',
+            ], [
+                'name'    => 'background_color',
+                'title'   => 'admin::app.configuration.index.general.payment-methods.background-color',
+                'type'    => 'color',
+                'default' => '#F1EADF',
+            ], [
+                'name'       => 'logo_1',
+                'title'      => 'admin::app.configuration.index.general.payment-methods.logo-1',
+                'type'       => 'image',
+                'validation' => 'mimes:png,jpg,jpeg,svg,webp',
+            ], [
+                'name'       => 'logo_2',
+                'title'      => 'admin::app.configuration.index.general.payment-methods.logo-2',
+                'type'       => 'image',
+                'validation' => 'mimes:png,jpg,jpeg,svg,webp',
+            ], [
+                'name'       => 'logo_3',
+                'title'      => 'admin::app.configuration.index.general.payment-methods.logo-3',
+                'type'       => 'image',
+                'validation' => 'mimes:png,jpg,jpeg,svg,webp',
+            ], [
+                'name'       => 'logo_4',
+                'title'      => 'admin::app.configuration.index.general.payment-methods.logo-4',
+                'type'       => 'image',
+                'validation' => 'mimes:png,jpg,jpeg,svg,webp',
+            ], [
+                'name'       => 'logo_5',
+                'title'      => 'admin::app.configuration.index.general.payment-methods.logo-5',
+                'type'       => 'image',
+                'validation' => 'mimes:png,jpg,jpeg,svg,webp',
+            ], [
+                'name'       => 'logo_6',
+                'title'      => 'admin::app.configuration.index.general.payment-methods.logo-6',
+                'type'       => 'image',
+                'validation' => 'mimes:png,jpg,jpeg,svg,webp',
+            ], [
+                'name'       => 'logo_7',
+                'title'      => 'admin::app.configuration.index.general.payment-methods.logo-7',
+                'type'       => 'image',
+                'validation' => 'mimes:png,jpg,jpeg,svg,webp',
+            ], [
+                'name'       => 'logo_8',
+                'title'      => 'admin::app.configuration.index.general.payment-methods.logo-8',
+                'type'       => 'image',
+                'validation' => 'mimes:png,jpg,jpeg,svg,webp',
+            ],
+        ],
+    ],
+    [
         'key'    => 'general.social-media.facebook',
         'name'   => 'admin::app.configuration.index.general.social-media.facebook.title',
         'info'   => 'admin::app.configuration.index.general.social-media.facebook.info',

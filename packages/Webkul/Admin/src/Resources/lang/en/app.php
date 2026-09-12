@@ -3627,7 +3627,21 @@ return [
                         'link' => 'Enlace de Tiktok',
                         'icon' => 'Ícono de Tiktok (opcional, deja vacío para usar el predeterminado)',
                     ],
-                ]
+                ],
+                'payment-methods' => [
+                    'title'            => 'Medios de pago',
+                    'info'             => 'Configura el banner de medios de pago que se muestra en el pie de página de la tienda.',
+                    'section-title'    => 'Título de la sección',
+                    'background-color' => 'Color de fondo de la franja',
+                    'logo-1'           => 'Logo 1',
+                    'logo-2'           => 'Logo 2',
+                    'logo-3'           => 'Logo 3',
+                    'logo-4'           => 'Logo 4',
+                    'logo-5'           => 'Logo 5',
+                    'logo-6'           => 'Logo 6',
+                    'logo-7'           => 'Logo 7',
+                    'logo-8'           => 'Logo 8',
+                ],
             ],
 
             'catalog' => [
