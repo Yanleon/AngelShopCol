@@ -27,7 +27,7 @@
             class="social-media-icon inline-flex transition-transform duration-300 ease-out hover:-translate-y-1 hover:scale-110"
             style="animation-delay: {{ $delayStep * 80 }}ms"
         >
-            <img src="{{ $iconUrl }}" alt="{{ ucfirst($network) }}" />
+            <img src="{{ $iconUrl }}" alt="{{ ucfirst($network) }}" class="h-[50px] w-[50px] object-contain" />
         </a>
     @endforeach
 </div>
