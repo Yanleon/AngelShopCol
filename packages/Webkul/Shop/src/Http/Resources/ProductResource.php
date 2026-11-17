@@ -40,7 +40,10 @@ class ProductResource extends JsonResource
             'images'      => product_image()->getGalleryImages($this),
             'is_new'      => (bool) $this->new,
             'is_featured' => (bool) $this->featured,
-            'on_sale'     => (bool) $productTypeInstance->haveDiscount(),
+            'on_sale'     => $onSale = (bool) $productTypeInstance->haveDiscount(),
+            'discount_percent' => $onSale
+                ? self::discountPercent($productTypeInstance->getRegularMinimalPrice(), $productTypeInstance->getMinimalPrice())
+                : 0,
             'is_saleable' => (bool) $productTypeInstance->isSaleable(),
             'is_wishlist' => (bool) auth()->guard()->user()?->wishlist_items
                 ->where('channel_id', core()->getCurrentChannel()->id)
@@ -56,5 +59,19 @@ class ProductResource extends JsonResource
                 'total'   => $this->reviewHelper->getTotalReviews($this),
             ],
         ];
+    }
+
+    /**
+     * Whole-number discount percentage shown on the sale badge (0 when there is none).
+     */
+    public static function discountPercent($regularPrice, $finalPrice): int
+    {
+        $regularPrice = (float) $regularPrice;
+
+        if ($regularPrice <= 0) {
+            return 0;
+        }
+
+        return max(0, (int) round(($regularPrice - (float) $finalPrice) / $regularPrice * 100));
     }
 }
