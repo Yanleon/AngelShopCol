@@ -24,7 +24,10 @@ it('shows the seasonal styles index page', function () {
 
     get(route('admin.settings.seasonal_styles.index'))
         ->assertOk()
-        ->assertSeeText(trans('admin::app.settings.seasonal-styles.index.title'));
+        ->assertSeeText(trans('admin::app.settings.seasonal-styles.index.title'))
+        // A raw <style> inside the Vue x-template swallows the rest of the page (blank screen).
+        ->assertDontSee(trans('admin::app.settings.seasonal-styles.index.create.css-help'), false)
+        ->assertSee(e(trans('admin::app.settings.seasonal-styles.index.create.css-help')), false);
 });
 
 it('requires a name when storing a style', function () {

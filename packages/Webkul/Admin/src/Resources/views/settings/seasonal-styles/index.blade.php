@@ -203,7 +203,8 @@
                                 />
 
                                 <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                    @lang('admin::app.settings.seasonal-styles.index.create.css-help')
+                                    {{-- Escaped on purpose: a raw <style> here breaks the Vue template. --}}
+                                    {{ trans('admin::app.settings.seasonal-styles.index.create.css-help') }}
                                 </p>
 
                                 <x-admin::form.control-group.error control-name="css" />
