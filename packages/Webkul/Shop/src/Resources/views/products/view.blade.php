@@ -354,6 +354,24 @@
                                     {!! $product->getTypeInstance()->getPriceHtml() !!}
                                 </p>
 
+                                <!-- Discount % and savings -->
+                                @php
+                                    $detailPrices = $product->getTypeInstance()->getProductPrices();
+                                    $detailRegular = (float) ($detailPrices['regular']['price'] ?? 0);
+                                    $detailFinal = (float) ($detailPrices['final']['price'] ?? 0);
+                                    $detailDiscount = \Webkul\Shop\Http\Resources\ProductResource::discountPercent($detailRegular, $detailFinal);
+                                @endphp
+
+                                @if ($detailDiscount > 0)
+                                    <div class="product-savings">
+                                        <span class="discount-badge discount-badge--detail">-{{ $detailDiscount }}%</span>
+
+                                        <span class="product-savings__amount">
+                                            @lang('shop::app.products.view.you-save', ['amount' => core()->formatPrice($detailRegular - $detailFinal)])
+                                        </span>
+                                    </div>
+                                @endif
+
                                 @if (\Webkul\Tax\Facades\Tax::isInclusiveTaxProductPrices())
                                     <span class="text-sm font-normal text-zinc-500 max-sm:text-xs">
                                         (@lang('shop::app.products.view.tax-inclusive'))

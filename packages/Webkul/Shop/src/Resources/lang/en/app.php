@@ -625,6 +625,7 @@ return [
             'related-product-title'  => 'Related Products',
             'review'                 => 'Reviews',
             'tax-inclusive'          => 'Inclusive of all taxes',
+            'you-save'               => 'You save :amount',
             'up-sell-title'          => 'We found other products you might like!',
             'whatsapp-buy-btn'       => 'Buy via WhatsApp',
             'whatsapp-default-message' => 'Hi, I want to buy ":product", I saw it on the website and would like some advice',

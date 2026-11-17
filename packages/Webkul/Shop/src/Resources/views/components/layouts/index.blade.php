@@ -148,6 +148,49 @@
                 border-radius: var(--theme-radius);
             }
 
+            /* Discount badge (product cards and product page) */
+            p.discount-badge,
+            span.discount-badge {
+                font-size: 15px;
+                font-weight: 700;
+                line-height: 1.4;
+                padding: 3px 12px;
+                letter-spacing: .3px;
+            }
+
+            .discount-badge--detail {
+                display: inline-block;
+                background: #dc2626;
+                color: #ffffff;
+                border-radius: 999px;
+            }
+
+            .product-savings {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 10px;
+                margin-top: 10px;
+            }
+
+            .product-savings__amount {
+                color: #16a34a;
+                font-size: 16px;
+                font-weight: 600;
+            }
+
+            @media (max-width: 639px) {
+                p.discount-badge,
+                span.discount-badge {
+                    font-size: 13px;
+                    padding: 2px 10px;
+                }
+
+                .product-savings__amount {
+                    font-size: 14px;
+                }
+            }
+
             {!! core()->getConfigData('general.content.custom_scripts.custom_css') !!}
 
             {{-- Active seasonal style (Configuración → Estilos de temporada) --}}
