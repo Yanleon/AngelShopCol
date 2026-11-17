@@ -4,6 +4,7 @@ namespace Webkul\SeasonalStyle\Repositories;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Spatie\ResponseCache\Facades\ResponseCache;
 use Webkul\Core\Eloquent\Repository;
 use Webkul\SeasonalStyle\Models\SeasonalStyle;
 
@@ -57,10 +58,15 @@ class SeasonalStyleRepository extends Repository
     }
 
     /**
-     * Drop the cached active CSS.
+     * Drop the cached active CSS and any cached store pages that embed it.
      */
     public function forgetCache(): void
     {
         Cache::forget(self::CACHE_KEY);
+
+        // The CSS is printed in every store page, so full-page cache must go too.
+        if (config('responsecache.enabled')) {
+            ResponseCache::clear();
+        }
     }
 }
