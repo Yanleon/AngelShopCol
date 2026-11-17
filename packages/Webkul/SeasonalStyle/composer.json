@@ -1,0 +1,10 @@
+{
+    "name": "webkul/seasonal-style",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Webkul\SeasonalStyle\\": "src/"
+        }
+    }
+}

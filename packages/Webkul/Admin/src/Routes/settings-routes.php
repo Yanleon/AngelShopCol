@@ -9,6 +9,7 @@ use Webkul\Admin\Http\Controllers\Settings\ExchangeRateController;
 use Webkul\Admin\Http\Controllers\Settings\InventorySourceController;
 use Webkul\Admin\Http\Controllers\Settings\LocaleController;
 use Webkul\Admin\Http\Controllers\Settings\RoleController;
+use Webkul\Admin\Http\Controllers\Settings\SeasonalStyleController;
 use Webkul\Admin\Http\Controllers\Settings\Tax\TaxCategoryController;
 use Webkul\Admin\Http\Controllers\Settings\Tax\TaxRateController;
 use Webkul\Admin\Http\Controllers\Settings\ThemeController;
@@ -239,6 +240,23 @@ Route::group(['middleware' => ['admin'], 'prefix' => config('app.admin_url')], f
             Route::put('edit', 'update')->name('admin.settings.description_templates.update');
 
             Route::delete('edit/{id}', 'destroy')->name('admin.settings.description_templates.delete');
+        });
+
+        /**
+         * Seasonal styles routes.
+         */
+        Route::controller(SeasonalStyleController::class)->prefix('seasonal-styles')->group(function () {
+            Route::get('', 'index')->name('admin.settings.seasonal_styles.index');
+
+            Route::post('', 'store')->name('admin.settings.seasonal_styles.store');
+
+            Route::get('edit/{id}', 'edit')->name('admin.settings.seasonal_styles.edit');
+
+            Route::put('edit', 'update')->name('admin.settings.seasonal_styles.update');
+
+            Route::post('toggle/{id}', 'toggle')->name('admin.settings.seasonal_styles.toggle');
+
+            Route::delete('edit/{id}', 'destroy')->name('admin.settings.seasonal_styles.delete');
         });
     });
 });

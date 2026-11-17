@@ -870,6 +870,26 @@ return [
         'name'  => 'admin::app.acl.delete',
         'route' => 'admin.settings.description_templates.delete',
         'sort'  => 3,
+    ], [
+        'key'   => 'settings.seasonal_styles',
+        'name'  => 'admin::app.acl.seasonal-styles',
+        'route' => 'admin.settings.seasonal_styles.index',
+        'sort'  => 12,
+    ], [
+        'key'   => 'settings.seasonal_styles.create',
+        'name'  => 'admin::app.acl.create',
+        'route' => 'admin.settings.seasonal_styles.store',
+        'sort'  => 1,
+    ], [
+        'key'   => 'settings.seasonal_styles.edit',
+        'name'  => 'admin::app.acl.edit',
+        'route' => 'admin.settings.seasonal_styles.edit',
+        'sort'  => 2,
+    ], [
+        'key'   => 'settings.seasonal_styles.delete',
+        'name'  => 'admin::app.acl.delete',
+        'route' => 'admin.settings.seasonal_styles.delete',
+        'sort'  => 3,
     ],
 
     /*

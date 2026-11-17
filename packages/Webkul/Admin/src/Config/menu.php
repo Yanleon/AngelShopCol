@@ -348,6 +348,12 @@ return [
         'route'      => 'admin.settings.description_templates.index',
         'sort'       => 11,
         'icon'       => '',
+    ], [
+        'key'        => 'settings.seasonal_styles',
+        'name'       => 'admin::app.components.layouts.sidebar.seasonal-styles',
+        'route'      => 'admin.settings.seasonal_styles.index',
+        'sort'       => 12,
+        'icon'       => '',
     ],
 
     /**

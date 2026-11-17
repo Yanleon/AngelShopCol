@@ -2893,6 +2893,46 @@ return [
             ],
         ],
 
+        'seasonal-styles' => [
+            'index' => [
+                'delete-warning' => '¿Está seguro de que desea eliminar este estilo?',
+                'info'           => 'Crea un estilo por evento (Black Friday, Navidad, Amor y Amistad...) y activa uno a la vez. Solo puede haber un estilo activo.',
+                'title'          => 'Estilos de temporada',
+
+                'datagrid' => [
+                    'name'       => 'Nombre',
+                    'status'     => 'Estado',
+                    'updated-at' => 'Actualizado',
+                    'active'     => 'Activo',
+                    'inactive'   => 'Inactivo',
+                    'activate'   => 'Activar',
+                    'deactivate' => 'Desactivar',
+                    'toggle'     => 'Activar / Desactivar',
+                    'edit'       => 'Editar',
+                    'delete'     => 'Eliminar',
+                ],
+
+                'create' => [
+                    'css'      => 'CSS',
+                    'css-help' => 'Escribe solo CSS, sin la etiqueta <style>. Se aplica en toda la tienda mientras el estilo esté activo.',
+                    'name'     => 'Nombre del evento',
+                    'save-btn' => 'Guardar estilo',
+                    'title'    => 'Crear estilo',
+                ],
+
+                'edit' => [
+                    'title' => 'Editar estilo',
+                ],
+
+                'activate-success'   => 'Estilo activado. Ya se ve en la tienda.',
+                'create-success'     => 'Estilo creado exitosamente.',
+                'deactivate-success' => 'Estilo desactivado.',
+                'delete-failed'      => 'Error al eliminar el estilo.',
+                'delete-success'     => 'Estilo eliminado exitosamente.',
+                'update-success'     => 'Estilo actualizado exitosamente.',
+            ],
+        ],
+
         'description-templates' => [
             'index' => [
                 'delete-warning' => '¿Está seguro de que desea eliminar esta plantilla?',
@@ -4282,6 +4322,7 @@ return [
                 'dashboard'                => 'Panel de Control',
                 'data-transfer'            => 'Transferencia de datos',
                 'description-templates'    => 'Plantillas de Descripción',
+                'seasonal-styles'          => 'Estilos de temporada',
                 'discount'                 => 'Descuento',
                 'email-templates'          => 'Plantillas de Correo Electrónico',
                 'events'                   => 'Eventos',
@@ -4523,6 +4564,7 @@ return [
         'data-transfer'            => 'Transferencia de datos',
         'delete'                   => 'Eliminar',
         'description-templates'    => 'Plantillas de Descripción',
+        'seasonal-styles'          => 'Estilos de temporada',
         'edit'                     => 'Editar',
         'email-templates'          => 'Plantillas de Correo Electrónico',
         'events'                   => 'Eventos',

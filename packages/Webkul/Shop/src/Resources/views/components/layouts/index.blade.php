@@ -149,6 +149,9 @@
             }
 
             {!! core()->getConfigData('general.content.custom_scripts.custom_css') !!}
+
+            {{-- Active seasonal style (Configuración → Estilos de temporada) --}}
+            {!! app(\Webkul\SeasonalStyle\Repositories\SeasonalStyleRepository::class)->activeCss() !!}
         </style>
 
         {!! view_render_event('bagisto.shop.layout.head.after') !!}

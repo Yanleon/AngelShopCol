@@ -98,6 +98,7 @@
             "Webkul\\BoldPayment\\": "packages/Webkul/BoldPayment/src",
             "Webkul\\Bold\\": "packages/Webkul/Bold/src",
             "Webkul\\DescriptionTemplate\\": "packages/Webkul/DescriptionTemplate/src",
+            "Webkul\\SeasonalStyle\\":"packages/Webkul/SeasonalStyle/src",
             "Contact\\": "packages/Contact/src"
 
             

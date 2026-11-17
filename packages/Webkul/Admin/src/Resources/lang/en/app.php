@@ -2867,6 +2867,46 @@ return [
             ],
         ],
 
+        'seasonal-styles' => [
+            'index' => [
+                'delete-warning' => 'Are you sure you want to delete this style?',
+                'info'           => 'Create one style per event (Black Friday, Christmas, Valentine\'s...) and activate one at a time. Only one style can be active.',
+                'title'          => 'Seasonal Styles',
+
+                'datagrid' => [
+                    'name'       => 'Name',
+                    'status'     => 'Status',
+                    'updated-at' => 'Updated',
+                    'active'     => 'Active',
+                    'inactive'   => 'Inactive',
+                    'activate'   => 'Activate',
+                    'deactivate' => 'Deactivate',
+                    'toggle'     => 'Activate / Deactivate',
+                    'edit'       => 'Edit',
+                    'delete'     => 'Delete',
+                ],
+
+                'create' => [
+                    'css'      => 'CSS',
+                    'css-help' => 'Write plain CSS, without the <style> tag. It applies to the whole store while the style is active.',
+                    'name'     => 'Event name',
+                    'save-btn' => 'Save Style',
+                    'title'    => 'Create Style',
+                ],
+
+                'edit' => [
+                    'title' => 'Edit Style',
+                ],
+
+                'activate-success'   => 'Style activated. It is now live on the store.',
+                'create-success'     => 'Style created successfully.',
+                'deactivate-success' => 'Style deactivated.',
+                'delete-failed'      => 'Failed to delete the style.',
+                'delete-success'     => 'Style deleted successfully.',
+                'update-success'     => 'Style updated successfully.',
+            ],
+        ],
+
         'description-templates' => [
             'index' => [
                 'delete-warning' => 'Are you sure you want to delete this template?',
@@ -4256,6 +4296,7 @@ return [
                 'dashboard'                => 'Dashboard',
                 'data-transfer'            => 'Data Transfer',
                 'description-templates'    => 'Description Templates',
+                'seasonal-styles'          => 'Seasonal Styles',
                 'discount'                 => 'Discount',
                 'email-templates'          => 'Email Templates',
                 'events'                   => 'Events',
@@ -4497,6 +4538,7 @@ return [
         'data-transfer'            => 'Data Transfer',
         'delete'                   => 'Delete',
         'description-templates'    => 'Description Templates',
+        'seasonal-styles'          => 'Seasonal Styles',
         'edit'                     => 'Edit',
         'email-templates'          => 'Email Templates',
         'events'                   => 'Events',

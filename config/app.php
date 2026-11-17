@@ -240,6 +240,7 @@ return [
         Webkul\Epayco\Providers\EpaycoServiceProvider::class,
         Webkul\BoldPayment\Providers\BoldPaymentServiceProvider::class,
         Webkul\DescriptionTemplate\Providers\DescriptionTemplateServiceProvider::class,
+        Webkul\SeasonalStyle\Providers\SeasonalStyleServiceProvider::class,
         Contact\Providers\ContactServiceProvider::class,
 
     ])->toArray(),
