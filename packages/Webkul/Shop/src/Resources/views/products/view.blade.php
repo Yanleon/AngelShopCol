@@ -357,9 +357,16 @@
                                 <!-- Discount % and savings -->
                                 @php
                                     $detailPrices = $product->getTypeInstance()->getProductPrices();
-                                    $detailRegular = (float) ($detailPrices['regular']['price'] ?? 0);
-                                    $detailFinal = (float) ($detailPrices['final']['price'] ?? 0);
-                                    $detailDiscount = \Webkul\Shop\Http\Resources\ProductResource::discountPercent($detailRegular, $detailFinal);
+
+                                    // Only types that expose both prices (simple, virtual, downloadable).
+                                    // Configurable/bundle/grouped have no "final" price here: never treat it as 0.
+                                    $hasBothPrices = isset($detailPrices['regular']['price'], $detailPrices['final']['price']);
+
+                                    $detailRegular = $hasBothPrices ? (float) $detailPrices['regular']['price'] : 0;
+                                    $detailFinal = $hasBothPrices ? (float) $detailPrices['final']['price'] : 0;
+                                    $detailDiscount = $hasBothPrices
+                                        ? \Webkul\Shop\Http\Resources\ProductResource::discountPercent($detailRegular, $detailFinal)
+                                        : 0;
                                 @endphp
 
                                 @if ($detailDiscount > 0)
