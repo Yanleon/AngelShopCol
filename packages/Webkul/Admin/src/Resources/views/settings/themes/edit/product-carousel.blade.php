@@ -329,6 +329,23 @@
                                 ],
                             },
                             {
+                                // Product switch added by the black_days migration (not a storefront filter).
+                                id: 'black_days',
+                                code: 'black_days',
+                                type: 'select',
+                                name: 'Black Days',
+                                options: [
+                                    {
+                                        'id': 0,
+                                        'admin_name': '@lang('admin::app.settings.themes.edit.no')',
+                                    },
+                                    {
+                                        'id': 1,
+                                        'admin_name': '@lang('admin::app.settings.themes.edit.yes')',
+                                    },
+                                ],
+                            },
+                            {
                                 id: 'category_id',
                                 code: 'category_id',
                                 type: 'text',

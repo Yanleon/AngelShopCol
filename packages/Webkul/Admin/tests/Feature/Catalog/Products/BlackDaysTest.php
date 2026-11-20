@@ -81,3 +81,15 @@ it('saves the black days switch and filters the store listing by it', function (
     expect($ids)->toContain($flagged->id)
         ->and($ids)->not->toContain($plain->id);
 });
+
+it('offers black days as a filter key when editing a product carousel', function () {
+    $theme = \Webkul\Theme\Models\ThemeCustomization::factory()->create([
+        'type' => 'product_carousel',
+    ]);
+
+    $this->loginAsAdmin();
+
+    get(route('admin.settings.themes.edit', $theme->id))
+        ->assertOk()
+        ->assertSee("code: 'black_days'", false);
+});
