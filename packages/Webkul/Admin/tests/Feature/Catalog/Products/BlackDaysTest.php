@@ -44,7 +44,8 @@ it('shows the black days switch on the product edit page', function () {
 
     get(route('admin.catalog.products.edit', $product->id))
         ->assertOk()
-        ->assertSee('name="black_days"', false);
+        ->assertSee('name="black_days"', false)
+        ->assertSee('Descuento Black Days');
 });
 
 it('saves the black days switch and filters the store listing by it', function () {
